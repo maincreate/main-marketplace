@@ -38,7 +38,7 @@ Toolkit and version `state` is not proof that a machine has the toolkit installe
 
 ### Espressif ESP-IDF
 
-Initial stable profiles: ESP-IDF `5.5.6` and `6.1`. Linux ARM64 and Linux x64 are build-host targets. A USB descriptor identifies a transport/interface, not the exact chip; flash and readback require an active `esptool` chip probe.
+Initial pilot profile: ESP-IDF `5.5.6`, previously used in successful firmware builds. Linux ARM64 and Linux x64 are build-host targets. A USB descriptor identifies a transport/interface, not the exact chip; flash and readback require an active `esptool` chip probe. The separately requested ESP-IDF `6.4` profile is retained as `blocked`: no official upstream v6.4 release or validated installer has been verified. Do not substitute another release or offer v6.4 for install/build/flash until Espressif publishes it and Main{Create} validates it.
 
 Flash readback is conditional. Secure Boot, Flash Encryption, read protection and chip-specific settings can make a raw readback unavailable or unusable as a restore image. Backups must include chip identity, flash size, partition metadata, security observations, SHA-256 and provenance. Restore requires an exact compatible target and explicit approval.
 
