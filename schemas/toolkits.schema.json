@@ -220,12 +220,7 @@
             },
             "operations": {
               "type": "object",
-              "required": [
-                "build",
-                "deploy",
-                "backup",
-                "restore"
-              ],
+              "required": [],
               "properties": {
                 "build": {
                   "type": "object",
@@ -541,7 +536,8 @@
             "available",
             "partial",
             "planned",
-            "unsupported"
+            "unsupported",
+            "pilot"
           ]
         },
         "recipeId": {
@@ -617,6 +613,18 @@
           "type": "boolean"
         },
         "requiresAdbAuthorization": {
+          "type": "boolean"
+        },
+        "requiresPackageAndApiCompatibility": {
+          "type": "boolean"
+        },
+        "requiresExactChipMatch": {
+          "type": "boolean"
+        },
+        "requiresFlashSizeMatch": {
+          "type": "boolean"
+        },
+        "requiresPartitionLayoutMatch": {
           "type": "boolean"
         }
       },
