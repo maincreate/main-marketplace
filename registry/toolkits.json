@@ -892,7 +892,10 @@
                 "apk",
                 "aab"
               ],
-              "notes": "Current Android app build target. Deployment requires a separate Android 17 device profile and compatible ADB runner."
+              "notes": "Current Android app build target. Deployment requires a separate Android 17 device profile and compatible ADB runner.",
+              "runnerLabels": [
+                "target-android-api-37"
+              ]
             },
             {
               "id": "android-legacy-api22-eink",
@@ -904,7 +907,12 @@
               "installableArtifact": "apk",
               "nativeAbi": "armeabi-v7a",
               "deviceProfileRef": "avalue-epd-42s",
-              "notes": "Legacy application target for the user's 42-inch E Ink device. Build with modern tools but enforce API 22 runtime compatibility and 32-bit ARMv7 native ABI where native libraries are used."
+              "notes": "Legacy application target for the user's 42-inch E Ink device. Build with modern tools but enforce API 22 runtime compatibility and 32-bit ARMv7 native ABI where native libraries are used.",
+              "runnerLabels": [
+                "target-android-api-22",
+                "target-device-avalue-epd-42s",
+                "target-abi-armeabi-v7a"
+              ]
             }
           ]
         },
