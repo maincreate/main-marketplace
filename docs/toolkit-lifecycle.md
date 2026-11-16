@@ -83,7 +83,7 @@ Android's object operations are app-specific:
 - **Backup:** preserve the verified APK artifact and, when the app supports it, application-owned data exports. Do not claim a whole-device backup or arbitrary private app-data extraction.
 - **Restore:** reinstall a verified APK and import application-owned data where supported. Do not restore Android OS firmware or the whole device.
 
-The generic Android SDK does not provide the E Ink vendor HAL, EPDC driver, waveform assets or BSP integration. App-level display control must use the device's existing vendor/BSP interface and be validated on the actual panel.
+The Android toolkit requires a host JDK 17 or newer; Main{Create} validates the installed Java runtime but does not silently replace a host Java installation. The generic Android SDK does not provide the E Ink vendor HAL, EPDC driver, waveform assets or BSP integration. App-level display control must use the device's existing vendor/BSP interface and be validated on the actual panel.
 
 ## Compatibility and labels
 
