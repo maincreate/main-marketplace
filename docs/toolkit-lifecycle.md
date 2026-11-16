@@ -55,7 +55,7 @@ Each version declares six lifecycle stages:
 
 ### ESP-IDF: firmware objects
 
-Current upstream stable ESP-IDF is `6.1.1`; keep `5.5.6` as a selectable older version for existing projects. The catalog includes both exact versions. Espressif documents EIM installation on Linux, macOS and Windows, and provides an `eim install` path for the latest stable release.
+Current upstream stable ESP-IDF is `6.1.1`; keep `5.5.6` as a selectable older version for existing projects. The catalog includes both exact versions. The release roadmap lists later `6.1.2` planning, but the `v6.1.2` GitHub release tag is not published; do not install an unreleased version. The marketplace pins EIM CLI `0.21.1` and its official SHA-256-verified Linux ARM64 and x64 archives.
 
 ESP-IDF builds a complete firmware bundle for the selected ESP32 family: bootloader, partition table, application, declared data partitions, and a merged full firmware image where appropriate. The deployment operation flashes that firmware bundle to a matching chip. Backup/restore apply to ESP32 firmware-image objects, not generic peripherals or external device state.
 
@@ -104,7 +104,9 @@ Cleanup is per toolkit version and per host. It must:
 
 ## Sources
 
-- ESP-IDF stable v6.1.1: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html
+- ESP-IDF stable v6.1.1: https://github.com/espressif/esp-idf/releases/tag/v6.1.1
+- EIM CLI v0.21.1 release and SHA-256 asset metadata: https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1
+- EIM CLI installation: https://docs.espressif.com/projects/idf-im-ui/en/latest/cli_installation.html
 - ESP-IDF Linux installation: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-setup.html
 - ESP-IDF macOS installation: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/macos-setup.html
 - ESP-IDF Windows installation: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/windows-setup.html
