@@ -869,7 +869,7 @@
           "minSdk": "project-defined",
           "androidGradlePlugin": "9.5.1",
           "gradle": "9.6.0",
-          "jdk": 17,
+          "jdk": "17+",
           "platforms": [
             "android-37",
             "android-22"
