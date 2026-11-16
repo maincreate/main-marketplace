@@ -1,14 +1,583 @@
 [
   {
     "id": "esp-idf",
+    "schemaVersion": 2,
     "displayName": "Espressif IoT Development Framework",
     "category": "firmware",
     "state": "catalog-only",
-    "installation": "operator-managed",
-    "description": "Toolchain version is detected by the operator-managed runner; no automatic installation in this release.",
+    "installation": "maincreate-managed",
+    "description": "Versioned Espressif firmware toolchain. Installation, build eligibility, device operations and cleanup are described per exact ESP-IDF release. Catalog metadata is declarative; reviewed installers and execution adapters live in main-builders and main-platform.",
+    "publisher": {
+      "name": "Espressif Systems",
+      "source": "https://github.com/espressif/esp-idf"
+    },
+    "trust": {
+      "tier": "maincreate-endorsed-pending-validation",
+      "basis": "official-upstream-release",
+      "versionValidationRequired": true
+    },
     "capabilities": [
       "firmware.esp_idf.build",
-      "workflow.esp_idf.preflight_build"
+      "workflow.esp_idf.preflight_build",
+      "firmware.esp_idf.flash",
+      "device.backup",
+      "device.restore"
+    ],
+    "versions": [
+      {
+        "version": "5.5.6",
+        "channel": "stable",
+        "status": "pilot",
+        "releaseUrl": "https://github.com/espressif/esp-idf/releases/tag/v5.5.6",
+        "installer": {
+          "name": "Espressif Installation Manager",
+          "version": "0.21.1",
+          "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
+        },
+        "components": {
+          "framework": "ESP-IDF",
+          "frameworkVersion": "5.5.6",
+          "toolchainSelection": "EIM-managed, exact-version"
+        },
+        "compatibility": {
+          "install": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            }
+          ],
+          "build": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            }
+          ],
+          "flash": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "backup": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "restore": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            }
+          ]
+        },
+        "deviceSupport": {
+          "families": [
+            "espressif-esp32"
+          ],
+          "chips": [
+            "ESP32",
+            "ESP32-S2",
+            "ESP32-S3",
+            "ESP32-C3",
+            "ESP32-C6",
+            "ESP32-H2",
+            "ESP32-P4"
+          ],
+          "transports": [
+            "usb-serial",
+            "usb-jtag"
+          ],
+          "probe": "esptool chip_id/read_mac",
+          "usbDescriptorIsChipProof": false,
+          "activeChipProbeRequired": true
+        },
+        "lifecycle": {
+          "install": {
+            "state": "planned",
+            "recipeId": "espressif.esp-idf.install",
+            "versionScoped": true,
+            "requiresExplicitApproval": true
+          },
+          "build": {
+            "state": "partial",
+            "capabilityId": "firmware.esp_idf.build",
+            "requiresInstalledVersion": true,
+            "requiresPinnedProjectRevision": true,
+            "versionGuardRequired": true
+          },
+          "flash": {
+            "state": "planned",
+            "capabilityId": "firmware.esp_idf.flash",
+            "requiresActiveChipProbe": true,
+            "requiresExplicitApproval": true,
+            "requiresMatchingChipAndImage": true
+          },
+          "backup": {
+            "state": "planned",
+            "capabilityId": "device.backup",
+            "methods": [
+              "flash-readback",
+              "partition-table-read"
+            ],
+            "requiresActiveChipProbe": true,
+            "requiresExplicitApproval": true,
+            "limitations": [
+              "Flash readback may be unavailable or unusable when flash encryption, secure boot, read protection, or chip-specific security settings are enabled.",
+              "A readback is not guaranteed restorable; record chip model, flash size, security state and partition metadata."
+            ]
+          },
+          "restore": {
+            "state": "planned",
+            "capabilityId": "device.restore",
+            "methods": [
+              "verified-flash-image",
+              "verified-partition-image"
+            ],
+            "requiresExactDeviceMatch": true,
+            "requiresActiveChipProbe": true,
+            "requiresExplicitApproval": true,
+            "limitations": [
+              "Reject mismatched chip family, flash size, image metadata or incompatible security state."
+            ]
+          },
+          "cleanup": {
+            "state": "planned",
+            "recipeId": "espressif.esp-idf.remove-version",
+            "instructions": "Remove only the selected EIM-managed ESP-IDF version and its version-owned toolchain/cache after active jobs release it. Show a dry-run inventory and require approval before deletion.",
+            "preserves": [
+              "project checkouts",
+              "sdkconfig and sdkconfig.defaults",
+              "build outputs and firmware artifacts",
+              "logs",
+              "device backups",
+              "other installed ESP-IDF versions"
+            ]
+          }
+        },
+        "constraints": [
+          "The current ESP-IDF build adapter does not yet enforce that installed idf.py matches the marketplace-selected version.",
+          "Device flash and backup/restore adapters are not implemented in the current platform release."
+        ]
+      },
+      {
+        "version": "6.1",
+        "channel": "stable",
+        "status": "catalog-only",
+        "releaseUrl": "https://github.com/espressif/esp-idf/releases/tag/v6.1",
+        "installer": {
+          "name": "Espressif Installation Manager",
+          "version": "0.21.1",
+          "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
+        },
+        "components": {
+          "framework": "ESP-IDF",
+          "frameworkVersion": "6.1",
+          "toolchainSelection": "EIM-managed, exact-version"
+        },
+        "compatibility": {
+          "install": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            }
+          ],
+          "build": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            }
+          ],
+          "flash": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "backup": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "restore": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "conditional",
+              "requiresConnectedDevice": true
+            }
+          ]
+        },
+        "deviceSupport": {
+          "families": [
+            "espressif-esp32"
+          ],
+          "chips": [
+            "ESP32",
+            "ESP32-S2",
+            "ESP32-S3",
+            "ESP32-C3",
+            "ESP32-C6",
+            "ESP32-H2",
+            "ESP32-P4"
+          ],
+          "transports": [
+            "usb-serial",
+            "usb-jtag"
+          ],
+          "probe": "esptool chip_id/read_mac",
+          "usbDescriptorIsChipProof": false,
+          "activeChipProbeRequired": true
+        },
+        "lifecycle": {
+          "install": {
+            "state": "planned",
+            "recipeId": "espressif.esp-idf.install",
+            "versionScoped": true,
+            "requiresExplicitApproval": true
+          },
+          "build": {
+            "state": "partial",
+            "capabilityId": "firmware.esp_idf.build",
+            "requiresInstalledVersion": true,
+            "requiresPinnedProjectRevision": true,
+            "versionGuardRequired": true
+          },
+          "flash": {
+            "state": "planned",
+            "capabilityId": "firmware.esp_idf.flash",
+            "requiresActiveChipProbe": true,
+            "requiresExplicitApproval": true,
+            "requiresMatchingChipAndImage": true
+          },
+          "backup": {
+            "state": "planned",
+            "capabilityId": "device.backup",
+            "methods": [
+              "flash-readback",
+              "partition-table-read"
+            ],
+            "requiresActiveChipProbe": true,
+            "requiresExplicitApproval": true,
+            "limitations": [
+              "Flash readback may be unavailable or unusable when flash encryption, secure boot, read protection, or chip-specific security settings are enabled.",
+              "A readback is not guaranteed restorable; record chip model, flash size, security state and partition metadata."
+            ]
+          },
+          "restore": {
+            "state": "planned",
+            "capabilityId": "device.restore",
+            "methods": [
+              "verified-flash-image",
+              "verified-partition-image"
+            ],
+            "requiresExactDeviceMatch": true,
+            "requiresActiveChipProbe": true,
+            "requiresExplicitApproval": true,
+            "limitations": [
+              "Reject mismatched chip family, flash size, image metadata or incompatible security state."
+            ]
+          },
+          "cleanup": {
+            "state": "planned",
+            "recipeId": "espressif.esp-idf.remove-version",
+            "instructions": "Remove only the selected EIM-managed ESP-IDF version and its version-owned toolchain/cache after active jobs release it. Show a dry-run inventory and require approval before deletion.",
+            "preserves": [
+              "project checkouts",
+              "sdkconfig and sdkconfig.defaults",
+              "build outputs and firmware artifacts",
+              "logs",
+              "device backups",
+              "other installed ESP-IDF versions"
+            ]
+          }
+        },
+        "constraints": [
+          "The current ESP-IDF build adapter does not yet enforce that installed idf.py matches the marketplace-selected version.",
+          "Device flash and backup/restore adapters are not implemented in the current platform release."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "android-sdk",
+    "schemaVersion": 2,
+    "displayName": "Android SDK & Device Tooling",
+    "category": "mobile",
+    "state": "catalog-only",
+    "installation": "maincreate-managed",
+    "description": "Versioned Android command-line build toolchain plus device-management operations. Build-host compatibility is separate from USB device-gateway compatibility; Android device backups are scoped and are not full-device images.",
+    "publisher": {
+      "name": "Google Android Developers",
+      "source": "https://developer.android.com/studio"
+    },
+    "trust": {
+      "tier": "maincreate-endorsed-pending-validation",
+      "basis": "official-upstream-release",
+      "versionValidationRequired": true
+    },
+    "capabilities": [
+      "android.gradle.build",
+      "android.adb.install_apk",
+      "android.fastboot.flash",
+      "android.device.backup",
+      "android.device.restore"
+    ],
+    "versions": [
+      {
+        "version": "15859902",
+        "channel": "stable",
+        "status": "pilot",
+        "releaseUrl": "https://developer.android.com/studio#command-tools",
+        "installer": {
+          "name": "Android SDK Command-line Tools",
+          "version": "15859902",
+          "artifact": "commandlinetools-linux-15859902_latest.zip",
+          "sha256": "4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583",
+          "source": "https://developer.android.com/studio"
+        },
+        "components": {
+          "commandLineTools": "15859902",
+          "platformTools": "37.0.1",
+          "buildTools": "36.0.0",
+          "compileSdk": "36",
+          "jdkMajor": 17,
+          "gradle": "Use project Gradle Wrapper; validate against Android Gradle Plugin compatibility."
+        },
+        "compatibility": {
+          "install": [
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "unsupported",
+              "reason": "Android Studio for Linux does not support ARM-based Linux hosts."
+            }
+          ],
+          "build": [
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "unsupported",
+              "reason": "Keep Android SDK builds on x64 until the complete headless SDK, AGP and AAPT2 stack is validated on ARM64."
+            }
+          ],
+          "flash": [
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "validation-required",
+              "requiresConnectedDevice": true,
+              "reason": "Validate ADB/fastboot package and USB permissions on the Pi before enabling device writes."
+            }
+          ],
+          "backup": [
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "validation-required",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "restore": [
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "validation-required",
+              "requiresConnectedDevice": true
+            }
+          ]
+        },
+        "deviceSupport": {
+          "families": [
+            "android-device"
+          ],
+          "transports": [
+            "adb-usb",
+            "fastboot-usb"
+          ],
+          "adbAuthorizationRequired": true,
+          "fastbootRequiresBootloaderUnlock": true,
+          "deviceModelProbeRequired": true
+        },
+        "lifecycle": {
+          "install": {
+            "state": "planned",
+            "recipeId": "android.sdk.install",
+            "versionScoped": true,
+            "requiresExplicitApproval": true
+          },
+          "build": {
+            "state": "planned",
+            "capabilityId": "android.gradle.build",
+            "requiresPinnedProjectRevision": true,
+            "requiresProjectGradleWrapper": true
+          },
+          "flash": {
+            "state": "planned",
+            "capabilityIds": [
+              "android.adb.install_apk",
+              "android.fastboot.flash"
+            ],
+            "requiresConnectedDevice": true,
+            "requiresExplicitApproval": true,
+            "requiresDeviceModelMatch": true,
+            "limitations": [
+              "APK installation through ADB is a package deployment operation; Fastboot partition flashing is a separate high-risk operation.",
+              "Fastboot flashing requires a compatible image, supported device model and an unlocked bootloader where applicable."
+            ]
+          },
+          "backup": {
+            "state": "planned",
+            "capabilityId": "android.device.backup",
+            "methods": [
+              "apk-export",
+              "shared-storage-copy",
+              "app-provided-export"
+            ],
+            "requiresConnectedDevice": true,
+            "requiresExplicitApproval": true,
+            "limitations": [
+              "Does not promise a complete device image.",
+              "Arbitrary private app data and protected system partitions are not generally readable through ADB on stock devices.",
+              "Bugreports and logs are diagnostics, not restorable backups."
+            ]
+          },
+          "restore": {
+            "state": "planned",
+            "capabilityId": "android.device.restore",
+            "methods": [
+              "reinstall-signed-apk",
+              "restore-shared-storage",
+              "app-provided-import"
+            ],
+            "requiresConnectedDevice": true,
+            "requiresExplicitApproval": true,
+            "limitations": [
+              "Do not claim arbitrary private app-data or complete system-state restore without root, OEM backup support or an app-provided restore mechanism.",
+              "Require package signature and device/API compatibility checks before installation."
+            ]
+          },
+          "cleanup": {
+            "state": "planned",
+            "recipeId": "android.sdk.remove-version",
+            "instructions": "Remove only the selected Main{Create}-managed Android SDK version directory and version-owned components after active builds release it. Show a dry-run inventory and require approval. Shared platform-tools or JDK installations must be reference-counted before removal.",
+            "preserves": [
+              "Android project checkouts",
+              "Gradle wrapper configuration and caches",
+              "APK/AAB artifacts",
+              "application signing keystores and passwords",
+              "device backups and exports",
+              "ADB authorization keys",
+              "other Android SDK versions"
+            ]
+          }
+        },
+        "constraints": [
+          "Build support is Linux x64 only in the initial profile; Linux ARM64 remains ineligible for Android SDK builds.",
+          "Main{Create} must keep APK installation distinct from bootloader-level partition flashing.",
+          "The Android device bridge on the Pi is a separate validation gate from the x64 build SDK.",
+          "Google SDK licenses must be accepted by an administrator during installation."
+        ]
+      }
     ]
   },
   {
