@@ -1,6 +1,6 @@
 # Main{Create} marketplace
 
-The official builder catalog contains versioned toolkit profiles in `registry/toolkits.json`, ESP32 hardware-to-SDK compatibility in `registry/microcontrollers.json`, and Android device target profiles in `registry/android-devices.json`. Toolkit profiles are validated against `schemas/toolkits.schema.json`.
+The official builder catalog contains versioned toolkit profiles in `registry/toolkits.json`, ESP32 hardware-to-SDK compatibility in `registry/microcontrollers.json`, and Android device target profiles in `registry/android-devices.json`. Toolkit profiles are validated against `schemas/toolkits.schema.json`; Android target profiles are validated against `schemas/android-devices.schema.json`.
 
 [main-platform](https://github.com/maincreate/main-platform) consumes the vendored catalog. It owns compatibility resolution, builder installation state, GitHub runner labels, scheduling, artifact handoff and approval. Reviewed installers, build/deploy/backup/restore adapters and cleanup executors belong to [main-builders](https://github.com/maincreate/main-builders).
 
