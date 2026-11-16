@@ -40,7 +40,7 @@ toolkit-android-sdk-2026-2-2-patch1, capability-android-app-build,
 target-android-api-22, target-device-avalue-epd-42s, target-abi-armeabi-v7a
 ```
 
-An Android deployment runner has a separate `capability-android-app-deploy` label and must be connected to, and authorized for, the requested device. Uninstalling or invalidating a toolkit/capability removes the corresponding labels. Projects request all required labels; GitHub schedules only a runner with the complete combination.
+An Android deployment runner carries `toolkit-android-adb-system`, `capability-android-app-deploy`, and device/API/ABI labels, and must be connected to and authorized for the requested device. Uninstalling or invalidating a toolkit/capability removes the corresponding labels. Projects request all required labels; GitHub schedules only a runner with the complete combination.
 
 ## Lifecycle contract
 
@@ -61,29 +61,36 @@ ESP-IDF builds a complete firmware bundle for the selected ESP32 family: bootloa
 
 Flash/readback requires an active `esptool` chip probe; a USB descriptor is not chip identity. Readback may be blocked or unusable with flash encryption, secure boot, read protection or chip-specific security settings. Firmware manifests record chip model, flash size, partition layout, security observations, SHA-256 and provenance. Restore rejects incompatible chip family, flash size, partition layout or security state.
 
-The current `firmware.build` adapter remains **partial** until it enforces the marketplace-selected installed version. Install, deploy, backup, restore and cleanup adapters are planned and must not be advertised as executable until validated.
+The runner adapter PR is implementing `firmware.esp_idf.build`, `firmware.esp_idf.flash`, `firmware.esp_idf.backup`, `firmware.esp_idf.restore`, and version-scoped cleanup. These remain pilot capabilities until CI and physical ESP32 validation pass.
 
 ### Android: application objects
 
-Current stable Android profile: Android Studio `2026.2.2 Patch 1`, command-line tools `15859902`, Platform-Tools `37.0.1` (stable; `37.0.3` is Canary), Build-Tools `36.0.0`, compile SDK/API `37`, Android Gradle Plugin `9.5.1`, Gradle `9.6.0`, and JDK `17`. The Android SDK profile is a build/deployment toolchain; it is not an Android OS firmware build system.
+Android is deliberately split into two toolkits because the build host and USB-connected device host have different architecture requirements.
 
-Official Android command-line tool packages are available for Linux x64, macOS x64, macOS ARM64, and Windows x64. The catalog pins a separate SHA-256 checksum and installer artifact for each upstream host package. Main{Create}'s current installer/build adapter is validated only on Linux x64; macOS and Windows remain validation-required, and Linux ARM64 is not an official Android Studio host. Android ADB deployment/backup/restore are supported on Linux x64 and Linux ARM64 when a native ADB executable is installed and the target device is authorized; this is independent of Android app build eligibility.
+**Android SDK — build toolkit**
 
-Two app target profiles are maintained by the same current toolchain:
+Current stable profile: Android Studio `2026.2.2 Patch 1`, command-line tools `15859902`, Platform-Tools `37.0.1`, Build-Tools `36.0.0`, compile SDK/API `37`, Android Gradle Plugin `9.5.1`, Gradle `9.6.0`, and JDK `17`. Main{Create} installs the command-line toolchain on Linux x64 only for this pilot. The installer pins the official archive SHA-256 and verifies the installed component versions. A JDK 17 runtime is required; the installer does not silently replace system Java.
+
+Two app target profiles are available from the same build toolkit:
 
 - **Current Android:** compile/target API `37`, with minimum API and ABI selected per project.
-- **Legacy E Ink Android:** compile with the current toolchain while enforcing Android `5.1.1` / API `22` runtime compatibility, `minSdk 22`, `targetSdk 22`, and APK output. Include `armeabi-v7a` native libraries when native code is used.
+- **Legacy E Ink Android:** compile with current SDK tools while enforcing Android `5.1.1` / API `22` runtime compatibility, `minSdk 22`, `targetSdk 22`, and APK output. Include `armeabi-v7a` native libraries when native code is used.
 
-The registered device profile `avalue-epd-42s` describes the user's Avalue EPD-42S / `SABRESD_MX7D`, product `sabresd_7d_eink`, NXP/Freescale i.MX7D ARMv7, Android 5.1.1/API 22, kernel 3.14.52, and 2880x2160 E Ink panel using `mxc_epdc_fb`. The build host may be x64 or macOS ARM64; the target APK must match the device's API/ABI. Build can happen on one runner and ADB deployment on another.
+The Android SDK toolkit owns application builds only. It does not deploy applications, back up device objects, or flash Android OS firmware.
 
-Android's object operations are app-specific:
+**Android ADB — device toolkit**
 
-- **Build:** create APK (for direct device installation) and optionally AAB (distribution).
-- **Deploy:** install/update the APK with `adb install`; do not use Fastboot for app deployment.
-- **Backup:** preserve the verified APK artifact and, when the app supports it, application-owned data exports. Do not claim a whole-device backup or arbitrary private app-data extraction.
-- **Restore:** reinstall a verified APK and import application-owned data where supported. Do not restore Android OS firmware or the whole device.
+The separate `android-adb` toolkit provides host-native ADB operations on Linux ARM64 and Linux x64. It uses an existing system ADB client when present or extracts the Debian-signed `adb` package into the Main{Create}-managed per-user toolkit directory. This allows the Raspberry Pi ARM64 builder to act as the USB-connected deployment runner without installing the Google Linux x64 Android SDK on ARM64.
 
-The Android toolkit requires a host JDK 17 or newer; Main{Create} validates the installed Java runtime but does not silently replace a host Java installation. The generic Android SDK does not provide the E Ink vendor HAL, EPDC driver, waveform assets or BSP integration. App-level display control must use the device's existing vendor/BSP interface and be validated on the actual panel.
+The registered device profile `avalue-epd-42s` describes the Avalue EPD-42S / `SABRESD_MX7D`, product `sabresd_7d_eink`, NXP/Freescale i.MX7D ARMv7, Android 5.1.1/API 22, kernel 3.14.52, and EPD-42S-SIDA0-01R 2880x2160 E Ink panel using `mxc_epdc_fb`. The build host may be Linux x64; the target APK must match API/ABI. Build and deploy may run on different machines.
+
+Android ADB object operations are package-specific:
+
+- **Deploy:** install/update a verified APK using `adb install -r`. This is application deployment, never Fastboot firmware flashing.
+- **Backup:** export the installed base/split APK package artifacts where Android package-manager permissions allow it. No private app data, databases, settings or whole-device image is included.
+- **Restore:** reinstall the verified base/split APK package artifacts to the same authorized device serial and package identity. No private app data or Android OS firmware is restored.
+
+The generic Android SDK does not provide the E Ink vendor HAL, EPDC driver, waveform assets or BSP integration. App-level display control must use the device's existing vendor/BSP interface and be validated on the actual panel.
 
 ## Compatibility and labels
 
