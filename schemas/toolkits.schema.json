@@ -106,7 +106,8 @@
                 "beta",
                 "rc",
                 "preview",
-                "lts"
+                "lts",
+                "requested"
               ]
             },
             "status": {
