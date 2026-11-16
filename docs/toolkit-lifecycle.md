@@ -74,7 +74,7 @@ Two app target profiles are maintained by the same current toolchain:
 - **Current Android:** compile/target API `37`, with minimum API and ABI selected per project.
 - **Legacy E Ink Android:** compile with the current toolchain while enforcing Android `5.1.1` / API `22` runtime compatibility, `minSdk 22`, `targetSdk 22`, and APK output. Include `armeabi-v7a` native libraries when native code is used.
 
-The registered device profile `avalue-epd-42s` describes the user's Avalue EPD-42S / `SABRESD_MX7D`, product `sabresd_7d_eink`, NXP/Freescale i.MX7D ARMv7, Android 5.1.1/API 22, kernel 3.14.52, and EPD-42S-SIDA0-01R 2880x2160 E Ink panel using `mxc_epdc_fb`. The build host may be x64 or macOS ARM64; the target APK must match the device's API/ABI. Build can happen on one runner and ADB deployment on another.
+The registered device profile `avalue-epd-42s` describes the user's Avalue EPD-42S / `SABRESD_MX7D`, product `sabresd_7d_eink`, NXP/Freescale i.MX7D ARMv7, Android 5.1.1/API 22, kernel 3.14.52, and 2880x2160 E Ink panel using `mxc_epdc_fb`. The build host may be x64 or macOS ARM64; the target APK must match the device's API/ABI. Build can happen on one runner and ADB deployment on another.
 
 Android's object operations are app-specific:
 
