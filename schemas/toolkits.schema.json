@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/maincreate/main-marketplace/blob/main/schemas/toolkits.schema.json",
+  "title": "Main{Create} Toolkit Catalog",
+  "description": "Declarative versioned toolkit catalog. Executable commands and installer hooks are forbidden.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "displayName",
+      "category",
+      "state",
+      "installation",
+      "description",
+      "capabilities"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9.-]*$"
+      },
+      "schemaVersion": {
+        "type": "integer",
+        "minimum": 2
+      },
+      "displayName": {
+        "type": "string",
+        "minLength": 1
+      },
+      "category": {
+        "type": "string",
+        "minLength": 1
+      },
+      "state": {
+        "enum": [
+          "catalog-only",
+          "pilot",
+          "available",
+          "deprecated"
+        ]
+      },
+      "installation": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "capabilities": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "publisher": {
+        "type": "object",
+        "required": [
+          "name",
+          "source"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "trust": {
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string"
+          },
+          "versionValidationRequired": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "versions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "version",
+            "channel",
+            "status",
+            "compatibility",
+            "lifecycle"
+          ],
+          "properties": {
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "stable",
+                "beta",
+                "rc",
+                "preview",
+                "lts"
+              ]
+            },
+            "status": {
+              "enum": [
+                "catalog-only",
+                "pilot",
+                "available",
+                "deprecated",
+                "blocked"
+              ]
+            },
+            "releaseUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "installer": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "artifact": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-fA-F0-9]{64}$"
+                },
+                "source": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": true
+            },
+            "components": {
+              "type": "object"
+            },
+            "compatibility": {
+              "type": "object",
+              "required": [
+                "install",
+                "build",
+                "flash",
+                "backup",
+                "restore"
+              ],
+              "properties": {
+                "install": {
+                  "$ref": "#/$defs/targets"
+                },
+                "build": {
+                  "$ref": "#/$defs/targets"
+                },
+                "flash": {
+                  "$ref": "#/$defs/targets"
+                },
+                "backup": {
+                  "$ref": "#/$defs/targets"
+                },
+                "restore": {
+                  "$ref": "#/$defs/targets"
+                }
+              },
+              "additionalProperties": false
+            },
+            "deviceSupport": {
+              "type": "object"
+            },
+            "lifecycle": {
+              "type": "object",
+              "required": [
+                "install",
+                "build",
+                "flash",
+                "backup",
+                "restore",
+                "cleanup"
+              ],
+              "properties": {
+                "install": {
+                  "$ref": "#/$defs/action"
+                },
+                "build": {
+                  "$ref": "#/$defs/action"
+                },
+                "flash": {
+                  "$ref": "#/$defs/action"
+                },
+                "backup": {
+                  "$ref": "#/$defs/action"
+                },
+                "restore": {
+                  "$ref": "#/$defs/action"
+                },
+                "cleanup": {
+                  "$ref": "#/$defs/action"
+                }
+              },
+              "additionalProperties": false
+            },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  "$defs": {
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "os",
+          "architecture",
+          "status"
+        ],
+        "properties": {
+          "os": {
+            "enum": [
+              "linux",
+              "windows",
+              "macos"
+            ]
+          },
+          "architecture": {
+            "enum": [
+              "x64",
+              "arm64",
+              "x86",
+              "armv7"
+            ]
+          },
+          "status": {
+            "enum": [
+              "supported",
+              "conditional",
+              "validation-required",
+              "unsupported"
+            ]
+          },
+          "requiresConnectedDevice": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "available",
+            "partial",
+            "planned",
+            "unsupported"
+          ]
+        },
+        "recipeId": {
+          "type": "string"
+        },
+        "capabilityId": {
+          "type": "string"
+        },
+        "capabilityIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "versionScoped": {
+          "type": "boolean"
+        },
+        "requiresExplicitApproval": {
+          "type": "boolean"
+        },
+        "requiresInstalledVersion": {
+          "type": "boolean"
+        },
+        "requiresPinnedProjectRevision": {
+          "type": "boolean"
+        },
+        "versionGuardRequired": {
+          "type": "boolean"
+        },
+        "requiresActiveChipProbe": {
+          "type": "boolean"
+        },
+        "requiresMatchingChipAndImage": {
+          "type": "boolean"
+        },
+        "requiresExactDeviceMatch": {
+          "type": "boolean"
+        },
+        "requiresConnectedDevice": {
+          "type": "boolean"
+        },
+        "requiresDeviceModelMatch": {
+          "type": "boolean"
+        },
+        "requiresProjectGradleWrapper": {
+          "type": "boolean"
+        },
+        "fastbootRequiresBootloaderUnlock": {
+          "type": "boolean"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "preserves": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
