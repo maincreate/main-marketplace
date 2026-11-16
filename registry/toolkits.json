@@ -935,6 +935,12 @@
               "requiresConnectedDevice": true
             },
             {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
               "os": "macos",
               "architecture": "x64",
               "status": "validation-required",
@@ -951,13 +957,6 @@
               "architecture": "x64",
               "status": "validation-required",
               "requiresConnectedDevice": true
-            },
-            {
-              "os": "linux",
-              "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true,
-              "reason": "Use a native ARM64 ADB package or validated build; Google's published Linux Platform-Tools package is not an ARM64 build."
             }
           ],
           "backup": [
@@ -968,6 +967,12 @@
               "requiresConnectedDevice": true
             },
             {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
               "os": "macos",
               "architecture": "x64",
               "status": "validation-required",
@@ -984,13 +989,6 @@
               "architecture": "x64",
               "status": "validation-required",
               "requiresConnectedDevice": true
-            },
-            {
-              "os": "linux",
-              "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true,
-              "reason": "Use a native ARM64 ADB package or validated build; Google's published Linux Platform-Tools package is not an ARM64 build."
             }
           ],
           "restore": [
@@ -1001,6 +999,12 @@
               "requiresConnectedDevice": true
             },
             {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
               "os": "macos",
               "architecture": "x64",
               "status": "validation-required",
@@ -1017,13 +1021,6 @@
               "architecture": "x64",
               "status": "validation-required",
               "requiresConnectedDevice": true
-            },
-            {
-              "os": "linux",
-              "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true,
-              "reason": "Use a native ARM64 ADB package or validated build; Google's published Linux Platform-Tools package is not an ARM64 build."
             }
           ]
         },
