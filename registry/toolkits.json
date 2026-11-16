@@ -229,6 +229,7 @@
             ],
             "targetFamily": "espressif-esp32",
             "runnerLabels": [
+              "toolkit-esp-idf-5-5-6",
               "capability-firmware-build",
               "target-esp32"
             ]
@@ -242,6 +243,7 @@
             "requiresMatchingChipAndFlashLayout": true,
             "requiresExplicitApproval": true,
             "runnerLabels": [
+              "toolkit-esp-idf-5-5-6",
               "capability-firmware-deploy",
               "target-esp32"
             ]
@@ -259,6 +261,11 @@
               "Readback can be blocked or unusable with flash encryption, secure boot, read protection, or chip-specific security configuration.",
               "Backup manifest must record chip model, flash size, partition table, security observations, source device identity, SHA-256 and provenance.",
               "This is a firmware-image backup, not a generic backup of all device state or external peripherals."
+            ],
+            "runnerLabels": [
+              "toolkit-esp-idf-5-5-6",
+              "capability-firmware-backup",
+              "target-esp32"
             ]
           },
           "restore": {
@@ -272,6 +279,11 @@
             "requiresExplicitApproval": true,
             "limitations": [
               "Reject incompatible chip family, flash size, partition layout or security state."
+            ],
+            "runnerLabels": [
+              "toolkit-esp-idf-5-5-6",
+              "capability-firmware-restore",
+              "target-esp32"
             ]
           }
         },
@@ -535,6 +547,7 @@
             ],
             "targetFamily": "espressif-esp32",
             "runnerLabels": [
+              "toolkit-esp-idf-6-1-1",
               "capability-firmware-build",
               "target-esp32"
             ]
@@ -548,6 +561,7 @@
             "requiresMatchingChipAndFlashLayout": true,
             "requiresExplicitApproval": true,
             "runnerLabels": [
+              "toolkit-esp-idf-6-1-1",
               "capability-firmware-deploy",
               "target-esp32"
             ]
@@ -565,6 +579,11 @@
               "Readback can be blocked or unusable with flash encryption, secure boot, read protection, or chip-specific security configuration.",
               "Backup manifest must record chip model, flash size, partition table, security observations, source device identity, SHA-256 and provenance.",
               "This is a firmware-image backup, not a generic backup of all device state or external peripherals."
+            ],
+            "runnerLabels": [
+              "toolkit-esp-idf-6-1-1",
+              "capability-firmware-backup",
+              "target-esp32"
             ]
           },
           "restore": {
@@ -578,6 +597,11 @@
             "requiresExplicitApproval": true,
             "limitations": [
               "Reject incompatible chip family, flash size, partition layout or security state."
+            ],
+            "runnerLabels": [
+              "toolkit-esp-idf-6-1-1",
+              "capability-firmware-restore",
+              "target-esp32"
             ]
           }
         },
@@ -896,6 +920,7 @@
               "android-legacy-api22-eink"
             ],
             "runnerLabels": [
+              "toolkit-android-sdk-2026-2-2-patch1",
               "capability-android-app-build"
             ]
           },
@@ -908,7 +933,14 @@
             "requiresAdbAuthorization": true,
             "requiresPackageAndApiCompatibility": true,
             "runnerLabels": [
-              "capability-android-app-deploy"
+              "toolkit-android-sdk-2026-2-2-patch1",
+              "capability-android-app-deploy",
+              "device-avalue-epd-42s",
+              "target-android-api-22",
+              "target-abi-armeabi-v7a"
+            ],
+            "supportedDeviceProfiles": [
+              "avalue-epd-42s"
             ]
           },
           "backup": {
@@ -924,6 +956,14 @@
               "This backs up an application artifact and optionally application-owned exported data; it is not a full-device backup.",
               "Private app data is not generally extractable from a stock device without app cooperation, an applicable Android backup mechanism, or elevated privileges.",
               "An AAB is a build/distribution artifact; direct device restore requires an APK or APK set."
+            ],
+            "runnerLabels": [
+              "toolkit-android-sdk-2026-2-2-patch1",
+              "capability-android-app-backup",
+              "device-avalue-epd-42s"
+            ],
+            "supportedDeviceProfiles": [
+              "avalue-epd-42s"
             ]
           },
           "restore": {
@@ -938,6 +978,14 @@
             "limitations": [
               "Restore reinstalls the app and optionally imports app-owned data; it does not restore Android OS firmware or the entire device.",
               "Require compatible minSdk, ABI, signing certificate and package identity."
+            ],
+            "runnerLabels": [
+              "toolkit-android-sdk-2026-2-2-patch1",
+              "capability-android-app-restore",
+              "device-avalue-epd-42s"
+            ],
+            "supportedDeviceProfiles": [
+              "avalue-epd-42s"
             ]
           }
         },
