@@ -67,7 +67,7 @@ The current `firmware.build` adapter remains **partial** until it enforces the m
 
 Current stable Android profile: Android Studio `2026.2.2 Patch 1`, command-line tools `15859902`, Platform-Tools `37.0.1` (stable; `37.0.3` is Canary), Build-Tools `36.0.0`, compile SDK/API `37`, Android Gradle Plugin `9.5.1`, Gradle `9.6.0`, and JDK `17`. The Android SDK profile is a build/deployment toolchain; it is not an Android OS firmware build system.
 
-Official Android command-line tool packages are available for Linux x64, macOS x64, macOS ARM64, and Windows x64. The catalog pins a separate SHA-256 checksum and installer artifact for each supported host package. Linux ARM64 is not an official Android Studio host. Android ADB deployment on Linux ARM64 can be enabled only after validating a native ADB package and USB permissions; this is independent of Android app build eligibility.
+Official Android command-line tool packages are available for Linux x64, macOS x64, macOS ARM64, and Windows x64. The catalog pins a separate SHA-256 checksum and installer artifact for each upstream host package. Main{Create}'s current installer/build adapter is validated only on Linux x64; macOS and Windows remain validation-required, and Linux ARM64 is not an official Android Studio host. Android ADB deployment/backup/restore are supported on Linux x64 and Linux ARM64 when a native ADB executable is installed and the target device is authorized; this is independent of Android app build eligibility.
 
 Two app target profiles are maintained by the same current toolchain:
 
