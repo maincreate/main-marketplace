@@ -6,7 +6,7 @@ The official builder catalog contains versioned toolkit profiles in `registry/to
 
 ## Artifact-specific toolkit lifecycle
 
-Every toolkit version declares exact version/provenance, host OS/architecture compatibility, artifact and target types, build/deploy/backup/restore capabilities, and safe cleanup guidance. ESP-IDF creates and flashes firmware images. Android creates and deploys APK application artifacts through ADB; it is not an Android OS firmware flasher.
+Every toolkit version declares exact version/provenance, host OS/architecture compatibility, artifact and target types, build/deploy/backup/restore capabilities, and safe cleanup guidance. Android application builds use the Android SDK toolkit; device deployment and package backup/restore use the separate Android ADB toolkit so the Linux ARM64 Pi can own the USB device. ESP-IDF creates and flashes firmware images. Android creates and deploys APK application artifacts through ADB; it is not an Android OS firmware flasher.
 
 Runner labels are derived from verified installed versions and validated capabilities. A build runner may differ from the deployment runner; artifacts move between them with a target/checksum manifest.
 
