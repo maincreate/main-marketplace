@@ -197,85 +197,77 @@
         ]
       },
       {
-        "version": "6.1",
-        "channel": "stable",
-        "status": "catalog-only",
-        "releaseUrl": "https://github.com/espressif/esp-idf/releases/tag/v6.1",
-        "installer": {
-          "name": "Espressif Installation Manager",
-          "version": "0.21.1",
-          "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
-        },
+        "version": "6.4",
+        "channel": "requested",
+        "status": "blocked",
         "components": {
           "framework": "ESP-IDF",
-          "frameworkVersion": "6.1",
-          "toolchainSelection": "EIM-managed, exact-version"
+          "frameworkVersion": "6.4",
+          "upstreamReleaseVerified": false
         },
         "compatibility": {
           "install": [
             {
               "os": "linux",
               "architecture": "arm64",
-              "status": "supported"
+              "status": "unsupported",
+              "reason": "No official ESP-IDF v6.4 release or validated installer recipe has been verified."
             },
             {
               "os": "linux",
               "architecture": "x64",
-              "status": "supported"
+              "status": "unsupported",
+              "reason": "No official ESP-IDF v6.4 release or validated installer recipe has been verified."
             }
           ],
           "build": [
             {
               "os": "linux",
               "architecture": "arm64",
-              "status": "supported"
+              "status": "unsupported",
+              "reason": "Blocked until an official v6.4 release and compatible toolchain are published and validated."
             },
             {
               "os": "linux",
               "architecture": "x64",
-              "status": "supported"
+              "status": "unsupported",
+              "reason": "Blocked until an official v6.4 release and compatible toolchain are published and validated."
             }
           ],
           "flash": [
             {
               "os": "linux",
               "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true
+              "status": "unsupported"
             },
             {
               "os": "linux",
               "architecture": "x64",
-              "status": "supported",
-              "requiresConnectedDevice": true
+              "status": "unsupported"
             }
           ],
           "backup": [
             {
               "os": "linux",
               "architecture": "arm64",
-              "status": "conditional",
-              "requiresConnectedDevice": true
+              "status": "unsupported"
             },
             {
               "os": "linux",
               "architecture": "x64",
-              "status": "conditional",
-              "requiresConnectedDevice": true
+              "status": "unsupported"
             }
           ],
           "restore": [
             {
               "os": "linux",
               "architecture": "arm64",
-              "status": "conditional",
-              "requiresConnectedDevice": true
+              "status": "unsupported"
             },
             {
               "os": "linux",
               "architecture": "x64",
-              "status": "conditional",
-              "requiresConnectedDevice": true
+              "status": "unsupported"
             }
           ]
         },
@@ -296,76 +288,38 @@
             "usb-serial",
             "usb-jtag"
           ],
-          "probe": "esptool chip_id/read_mac",
-          "usbDescriptorIsChipProof": false,
           "activeChipProbeRequired": true
         },
         "lifecycle": {
           "install": {
-            "state": "planned",
-            "recipeId": "espressif.esp-idf.install",
-            "versionScoped": true,
-            "requiresExplicitApproval": true
+            "state": "unsupported",
+            "instructions": "Blocked until an official Espressif ESP-IDF v6.4 release and reviewed, checksum-pinned installation recipe exist."
           },
           "build": {
-            "state": "partial",
-            "capabilityId": "firmware.esp_idf.build",
-            "requiresInstalledVersion": true,
-            "requiresPinnedProjectRevision": true,
-            "versionGuardRequired": true
+            "state": "unsupported",
+            "instructions": "Do not schedule v6.4 builds until the official release and toolchain are verified."
           },
           "flash": {
-            "state": "planned",
-            "capabilityId": "firmware.esp_idf.flash",
-            "requiresActiveChipProbe": true,
-            "requiresExplicitApproval": true,
-            "requiresMatchingChipAndImage": true
+            "state": "unsupported",
+            "instructions": "No v6.4 build/flash profile is enabled."
           },
           "backup": {
-            "state": "planned",
-            "capabilityId": "device.backup",
-            "methods": [
-              "flash-readback",
-              "partition-table-read"
-            ],
-            "requiresActiveChipProbe": true,
-            "requiresExplicitApproval": true,
-            "limitations": [
-              "Flash readback may be unavailable or unusable when flash encryption, secure boot, read protection, or chip-specific security settings are enabled.",
-              "A readback is not guaranteed restorable; record chip model, flash size, security state and partition metadata."
-            ]
+            "state": "unsupported",
+            "instructions": "No v6.4 device backup profile is enabled."
           },
           "restore": {
-            "state": "planned",
-            "capabilityId": "device.restore",
-            "methods": [
-              "verified-flash-image",
-              "verified-partition-image"
-            ],
-            "requiresExactDeviceMatch": true,
-            "requiresActiveChipProbe": true,
-            "requiresExplicitApproval": true,
-            "limitations": [
-              "Reject mismatched chip family, flash size, image metadata or incompatible security state."
-            ]
+            "state": "unsupported",
+            "instructions": "No v6.4 device restore profile is enabled."
           },
           "cleanup": {
-            "state": "planned",
-            "recipeId": "espressif.esp-idf.remove-version",
-            "instructions": "Remove only the selected EIM-managed ESP-IDF version and its version-owned toolchain/cache after active jobs release it. Show a dry-run inventory and require approval before deletion.",
-            "preserves": [
-              "project checkouts",
-              "sdkconfig and sdkconfig.defaults",
-              "build outputs and firmware artifacts",
-              "logs",
-              "device backups",
-              "other installed ESP-IDF versions"
-            ]
+            "state": "unsupported",
+            "instructions": "No v6.4 installation can be created by Main{Create}; nothing to clean up."
           }
         },
         "constraints": [
-          "The current ESP-IDF build adapter does not yet enforce that installed idf.py matches the marketplace-selected version.",
-          "Device flash and backup/restore adapters are not implemented in the current platform release."
+          "Retained as an explicit requested target, not an available upstream release.",
+          "Do not fabricate a release URL, installer, checksum, or compatibility claim.",
+          "Re-evaluate when Espressif publishes an official v6.4 release and Main{Create} validates the installer and toolchain on each host architecture."
         ]
       }
     ]
