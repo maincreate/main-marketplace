@@ -154,7 +154,7 @@
               "required": [
                 "install",
                 "build",
-                "flash",
+                "deploy",
                 "backup",
                 "restore"
               ],
@@ -165,13 +165,13 @@
                 "build": {
                   "$ref": "#/$defs/targets"
                 },
-                "flash": {
-                  "$ref": "#/$defs/targets"
-                },
                 "backup": {
                   "$ref": "#/$defs/targets"
                 },
                 "restore": {
+                  "$ref": "#/$defs/targets"
+                },
+                "deploy": {
                   "$ref": "#/$defs/targets"
                 }
               },
@@ -185,7 +185,7 @@
               "required": [
                 "install",
                 "build",
-                "flash",
+                "deploy",
                 "backup",
                 "restore",
                 "cleanup"
@@ -197,9 +197,6 @@
                 "build": {
                   "$ref": "#/$defs/action"
                 },
-                "flash": {
-                  "$ref": "#/$defs/action"
-                },
                 "backup": {
                   "$ref": "#/$defs/action"
                 },
@@ -207,6 +204,9 @@
                   "$ref": "#/$defs/action"
                 },
                 "cleanup": {
+                  "$ref": "#/$defs/action"
+                },
+                "deploy": {
                   "$ref": "#/$defs/action"
                 }
               },
@@ -217,6 +217,195 @@
               "items": {
                 "type": "string"
               }
+            },
+            "operations": {
+              "type": "object",
+              "required": [
+                "build",
+                "deploy",
+                "backup",
+                "restore"
+              ],
+              "properties": {
+                "build": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "artifactType": {
+                      "type": "string"
+                    },
+                    "artifactTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "outputs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "targetFamily": {
+                      "type": "string"
+                    },
+                    "targetProfiles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "runnerLabels": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "deploy": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId",
+                    "operationType"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "operationType": {
+                      "type": "string"
+                    },
+                    "artifactType": {
+                      "type": "string"
+                    },
+                    "targetObjectType": {
+                      "type": "string"
+                    },
+                    "requiresActiveChipProbe": {
+                      "type": "boolean"
+                    },
+                    "requiresMatchingChipAndFlashLayout": {
+                      "type": "boolean"
+                    },
+                    "requiresExplicitApproval": {
+                      "type": "boolean"
+                    },
+                    "requiresConnectedDevice": {
+                      "type": "boolean"
+                    },
+                    "requiresAdbAuthorization": {
+                      "type": "boolean"
+                    },
+                    "requiresPackageAndApiCompatibility": {
+                      "type": "boolean"
+                    },
+                    "runnerLabels": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "backup": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId",
+                    "objectType"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "objectType": {
+                      "type": "string"
+                    },
+                    "methods": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "requiresActiveChipProbe": {
+                      "type": "boolean"
+                    },
+                    "requiresExplicitApproval": {
+                      "type": "boolean"
+                    },
+                    "requiresConnectedDevice": {
+                      "type": "boolean"
+                    },
+                    "limitations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "restore": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId",
+                    "objectType"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "objectType": {
+                      "type": "string"
+                    },
+                    "operationType": {
+                      "type": "string"
+                    },
+                    "methods": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "requiresExactChipMatch": {
+                      "type": "boolean"
+                    },
+                    "requiresFlashSizeMatch": {
+                      "type": "boolean"
+                    },
+                    "requiresPartitionLayoutMatch": {
+                      "type": "boolean"
+                    },
+                    "requiresActiveChipProbe": {
+                      "type": "boolean"
+                    },
+                    "requiresExplicitApproval": {
+                      "type": "boolean"
+                    },
+                    "requiresConnectedDevice": {
+                      "type": "boolean"
+                    },
+                    "requiresPackageAndSignatureValidation": {
+                      "type": "boolean"
+                    },
+                    "limitations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -351,6 +540,12 @@
           "items": {
             "type": "string"
           }
+        },
+        "requiresGoogleSdkLicenseAcceptance": {
+          "type": "boolean"
+        },
+        "requiresAdbAuthorization": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false
