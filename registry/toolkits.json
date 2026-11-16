@@ -17,10 +17,10 @@
       "versionValidationRequired": true
     },
     "capabilities": [
-      "firmware.build",
-      "firmware.flash",
-      "firmware.backup",
-      "firmware.restore"
+      "firmware.esp_idf.build",
+      "firmware.esp_idf.flash",
+      "firmware.esp_idf.backup",
+      "firmware.esp_idf.restore"
     ],
     "versions": [
       {
@@ -42,9 +42,7 @@
             "Ninja",
             "Python"
           ],
-          "toolchain": "version-matched Espressif cross-compilers",
-          "installCommand": "eim install -i v{version} -n true --cleanup true",
-          "installRoot": "~/.local/share/maincreate/toolkits/esp-idf"
+          "toolchain": "version-matched Espressif cross-compilers"
         },
         "compatibility": {
           "install": [
@@ -221,7 +219,7 @@
         },
         "operations": {
           "build": {
-            "capabilityId": "firmware.build",
+            "capabilityId": "firmware.esp_idf.build",
             "artifactType": "esp32-firmware-bundle",
             "outputs": [
               "bootloader",
@@ -238,7 +236,7 @@
             ]
           },
           "deploy": {
-            "capabilityId": "firmware.flash",
+            "capabilityId": "firmware.esp_idf.flash",
             "operationType": "flash-firmware-image",
             "artifactType": "esp32-firmware-bundle",
             "targetObjectType": "esp32-device",
@@ -252,7 +250,7 @@
             ]
           },
           "backup": {
-            "capabilityId": "firmware.backup",
+            "capabilityId": "firmware.esp_idf.backup",
             "objectType": "esp32-device-firmware-image",
             "methods": [
               "flash-readback",
@@ -272,7 +270,7 @@
             ]
           },
           "restore": {
-            "capabilityId": "firmware.restore",
+            "capabilityId": "firmware.esp_idf.restore",
             "objectType": "esp32-device-firmware-image",
             "operationType": "restore-firmware-image",
             "requiresExactChipMatch": true,
@@ -299,27 +297,27 @@
           },
           "build": {
             "state": "pilot",
-            "capabilityId": "firmware.build",
+            "capabilityId": "firmware.esp_idf.build",
             "requiresInstalledVersion": true,
             "requiresPinnedProjectRevision": true,
             "versionGuardRequired": true
           },
           "deploy": {
             "state": "pilot",
-            "capabilityId": "firmware.flash",
+            "capabilityId": "firmware.esp_idf.flash",
             "requiresActiveChipProbe": true,
             "requiresExplicitApproval": true,
             "requiresMatchingChipAndImage": true
           },
           "backup": {
             "state": "pilot",
-            "capabilityId": "firmware.backup",
+            "capabilityId": "firmware.esp_idf.backup",
             "requiresActiveChipProbe": true,
             "requiresExplicitApproval": true
           },
           "restore": {
             "state": "pilot",
-            "capabilityId": "firmware.restore",
+            "capabilityId": "firmware.esp_idf.restore",
             "requiresExactDeviceMatch": true,
             "requiresActiveChipProbe": true,
             "requiresExplicitApproval": true
@@ -379,9 +377,7 @@
             "Ninja",
             "Python"
           ],
-          "toolchain": "version-matched Espressif cross-compilers",
-          "installCommand": "eim install -i v{version} -n true --cleanup true",
-          "installRoot": "~/.local/share/maincreate/toolkits/esp-idf"
+          "toolchain": "version-matched Espressif cross-compilers"
         },
         "compatibility": {
           "install": [
@@ -558,7 +554,7 @@
         },
         "operations": {
           "build": {
-            "capabilityId": "firmware.build",
+            "capabilityId": "firmware.esp_idf.build",
             "artifactType": "esp32-firmware-bundle",
             "outputs": [
               "bootloader",
@@ -575,7 +571,7 @@
             ]
           },
           "deploy": {
-            "capabilityId": "firmware.flash",
+            "capabilityId": "firmware.esp_idf.flash",
             "operationType": "flash-firmware-image",
             "artifactType": "esp32-firmware-bundle",
             "targetObjectType": "esp32-device",
@@ -589,7 +585,7 @@
             ]
           },
           "backup": {
-            "capabilityId": "firmware.backup",
+            "capabilityId": "firmware.esp_idf.backup",
             "objectType": "esp32-device-firmware-image",
             "methods": [
               "flash-readback",
@@ -609,7 +605,7 @@
             ]
           },
           "restore": {
-            "capabilityId": "firmware.restore",
+            "capabilityId": "firmware.esp_idf.restore",
             "objectType": "esp32-device-firmware-image",
             "operationType": "restore-firmware-image",
             "requiresExactChipMatch": true,
@@ -636,27 +632,27 @@
           },
           "build": {
             "state": "pilot",
-            "capabilityId": "firmware.build",
+            "capabilityId": "firmware.esp_idf.build",
             "requiresInstalledVersion": true,
             "requiresPinnedProjectRevision": true,
             "versionGuardRequired": true
           },
           "deploy": {
             "state": "pilot",
-            "capabilityId": "firmware.flash",
+            "capabilityId": "firmware.esp_idf.flash",
             "requiresActiveChipProbe": true,
             "requiresExplicitApproval": true,
             "requiresMatchingChipAndImage": true
           },
           "backup": {
             "state": "pilot",
-            "capabilityId": "firmware.backup",
+            "capabilityId": "firmware.esp_idf.backup",
             "requiresActiveChipProbe": true,
             "requiresExplicitApproval": true
           },
           "restore": {
             "state": "pilot",
-            "capabilityId": "firmware.restore",
+            "capabilityId": "firmware.esp_idf.restore",
             "requiresExactDeviceMatch": true,
             "requiresActiveChipProbe": true,
             "requiresExplicitApproval": true
@@ -843,10 +839,7 @@
       "versionValidationRequired": true
     },
     "capabilities": [
-      "android.app.build",
-      "android.app.deploy",
-      "android.app.backup",
-      "android.app.restore"
+      "android.app.build"
     ],
     "versions": [
       {
@@ -927,102 +920,9 @@
               "reason": "Google does not publish Linux ARM64 Android command-line tools and does not support Android Studio on ARM-based Linux hosts."
             }
           ],
-          "deploy": [
-            {
-              "os": "linux",
-              "architecture": "x64",
-              "status": "supported",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "linux",
-              "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "macos",
-              "architecture": "x64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "macos",
-              "architecture": "arm64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "windows",
-              "architecture": "x64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            }
-          ],
-          "backup": [
-            {
-              "os": "linux",
-              "architecture": "x64",
-              "status": "supported",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "linux",
-              "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "macos",
-              "architecture": "x64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "macos",
-              "architecture": "arm64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "windows",
-              "architecture": "x64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            }
-          ],
-          "restore": [
-            {
-              "os": "linux",
-              "architecture": "x64",
-              "status": "supported",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "linux",
-              "architecture": "arm64",
-              "status": "supported",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "macos",
-              "architecture": "x64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "macos",
-              "architecture": "arm64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            },
-            {
-              "os": "windows",
-              "architecture": "x64",
-              "status": "validation-required",
-              "requiresConnectedDevice": true
-            }
-          ]
+          "deploy": [],
+          "backup": [],
+          "restore": []
         },
         "deviceSupport": {
           "families": [
@@ -1084,67 +984,6 @@
               "toolkit-android-sdk-2026-2-2-patch1",
               "capability-android-app-build"
             ]
-          },
-          "deploy": {
-            "capabilityId": "android.app.deploy",
-            "operationType": "adb-install-apk",
-            "artifactType": "apk",
-            "targetObjectType": "android-application-on-device",
-            "requiresConnectedDevice": true,
-            "requiresAdbAuthorization": true,
-            "requiresPackageAndApiCompatibility": true,
-            "runnerLabels": [
-              "toolkit-android-sdk-2026-2-2-patch1",
-              "capability-android-app-deploy",
-              "target-device-avalue-epd-42s",
-              "target-android-api-22",
-              "target-abi-armeabi-v7a"
-            ],
-            "supportedDeviceProfiles": [
-              "avalue-epd-42s"
-            ]
-          },
-          "backup": {
-            "capabilityId": "android.app.backup",
-            "objectType": "android-application-package-artifact",
-            "methods": [
-              "installed-base-and-split-apk-export"
-            ],
-            "requiresConnectedDevice": true,
-            "limitations": [
-              "This backs up installed APK/split-APK package artifacts only; it is not a full-device backup.",
-              "Private app data, app databases and settings are not included.",
-              "APK export from /data/app may be blocked by device policy or package manager behavior."
-            ],
-            "runnerLabels": [
-              "toolkit-android-sdk-2026-2-2-patch1",
-              "capability-android-app-backup",
-              "target-device-avalue-epd-42s"
-            ],
-            "supportedDeviceProfiles": [
-              "avalue-epd-42s"
-            ]
-          },
-          "restore": {
-            "capabilityId": "android.app.restore",
-            "objectType": "android-application-package-artifact",
-            "methods": [
-              "adb-install-or-install-multiple-verified-apks"
-            ],
-            "requiresConnectedDevice": true,
-            "requiresPackageAndSignatureValidation": true,
-            "limitations": [
-              "Restore reinstalls the verified APK/split-APK package only; it does not restore private app data or Android OS firmware.",
-              "Require the same ADB device serial, package identity and compatible signing certificate."
-            ],
-            "runnerLabels": [
-              "toolkit-android-sdk-2026-2-2-patch1",
-              "capability-android-app-restore",
-              "target-device-avalue-epd-42s"
-            ],
-            "supportedDeviceProfiles": [
-              "avalue-epd-42s"
-            ]
           }
         },
         "lifecycle": {
@@ -1162,23 +1001,16 @@
             "requiresProjectGradleWrapper": true
           },
           "deploy": {
-            "state": "pilot",
-            "capabilityId": "android.app.deploy",
-            "requiresConnectedDevice": true,
-            "requiresAdbAuthorization": true,
-            "requiresExplicitApproval": true
+            "state": "unsupported",
+            "instructions": "Android application deployment is provided by the separate android-adb device toolkit; Android SDK installation is not required on the device-connected runner."
           },
           "backup": {
-            "state": "pilot",
-            "capabilityId": "android.app.backup",
-            "requiresConnectedDevice": true,
-            "requiresExplicitApproval": true
+            "state": "unsupported",
+            "instructions": "APK package backup is provided by the separate android-adb device toolkit."
           },
           "restore": {
-            "state": "pilot",
-            "capabilityId": "android.app.restore",
-            "requiresConnectedDevice": true,
-            "requiresExplicitApproval": true
+            "state": "unsupported",
+            "instructions": "APK package restore is provided by the separate android-adb device toolkit."
           },
           "cleanup": {
             "state": "pilot",
@@ -1292,6 +1124,222 @@
     "capabilities": [
       "web.static.publish.github_pages",
       "web.static.publish.cloudflare"
+    ]
+  },
+  {
+    "id": "android-adb",
+    "schemaVersion": 2,
+    "displayName": "Android ADB Device Tools",
+    "category": "device-tools",
+    "state": "pilot",
+    "installation": "maincreate-managed",
+    "description": "Device-side Android application operations. Uses the host-native ADB client to inspect connected Android devices, install APKs, export installed APK/split packages and reinstall verified package artifacts. It does not build Android applications or flash Android OS firmware.",
+    "publisher": {
+      "name": "Android Open Source Project / Debian package maintainers",
+      "source": "https://developer.android.com/tools/adb"
+    },
+    "trust": {
+      "tier": "maincreate-endorsed-pending-validation",
+      "basis": "distribution-signed-package-and-runtime-probe",
+      "versionValidationRequired": true
+    },
+    "capabilities": [
+      "android.app.deploy",
+      "android.app.backup",
+      "android.app.restore"
+    ],
+    "versions": [
+      {
+        "version": "system",
+        "channel": "stable",
+        "status": "pilot",
+        "installer": {
+          "name": "Host-native Android Debug Bridge",
+          "version": "distribution-managed",
+          "source": "https://packages.debian.org/adb"
+        },
+        "installers": [],
+        "components": {
+          "packageName": "adb",
+          "packageManager": "apt",
+          "installScope": "per-user extracted Debian package when no system ADB is available",
+          "verification": [
+            "adb version",
+            "adb devices -l",
+            "device authorization and model probe"
+          ]
+        },
+        "compatibility": {
+          "install": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported"
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported"
+            }
+          ],
+          "build": [],
+          "deploy": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "backup": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            }
+          ],
+          "restore": [
+            {
+              "os": "linux",
+              "architecture": "arm64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            },
+            {
+              "os": "linux",
+              "architecture": "x64",
+              "status": "supported",
+              "requiresConnectedDevice": true
+            }
+          ]
+        },
+        "deviceSupport": {
+          "families": [
+            "android-device"
+          ],
+          "transports": [
+            "adb-usb"
+          ],
+          "adbAuthorizationRequired": true,
+          "deviceModelProbeRequired": true,
+          "supportedDeviceProfiles": [
+            "avalue-epd-42s"
+          ]
+        },
+        "operations": {
+          "deploy": {
+            "capabilityId": "android.app.deploy",
+            "operationType": "adb-install-apk",
+            "artifactType": "android-apk",
+            "targetObjectType": "android-application-on-device",
+            "requiresConnectedDevice": true,
+            "requiresAdbAuthorization": true,
+            "requiresPackageAndApiCompatibility": true,
+            "runnerLabels": [
+              "toolkit-android-adb-system",
+              "capability-android-app-deploy",
+              "target-device-avalue-epd-42s",
+              "target-android-api-22",
+              "target-abi-armeabi-v7a"
+            ]
+          },
+          "backup": {
+            "capabilityId": "android.app.backup",
+            "objectType": "android-application-package-artifact",
+            "methods": [
+              "installed-base-and-split-apk-export"
+            ],
+            "requiresConnectedDevice": true,
+            "limitations": [
+              "Backs up installed APK/split APK artifacts only; no private app data or full-device backup."
+            ],
+            "runnerLabels": [
+              "toolkit-android-adb-system",
+              "capability-android-app-backup",
+              "target-device-avalue-epd-42s"
+            ]
+          },
+          "restore": {
+            "capabilityId": "android.app.restore",
+            "objectType": "android-application-package-artifact",
+            "methods": [
+              "adb-install-or-install-multiple-verified-apks"
+            ],
+            "requiresConnectedDevice": true,
+            "requiresPackageAndSignatureValidation": true,
+            "limitations": [
+              "Reinstalls verified APK/split APK package artifacts only; no private app data or Android OS firmware."
+            ],
+            "runnerLabels": [
+              "toolkit-android-adb-system",
+              "capability-android-app-restore",
+              "target-device-avalue-epd-42s"
+            ]
+          }
+        },
+        "lifecycle": {
+          "install": {
+            "state": "pilot",
+            "recipeId": "android.adb.install-debian",
+            "versionScoped": true,
+            "requiresExplicitApproval": true
+          },
+          "build": {
+            "state": "unsupported",
+            "instructions": "Android application builds use the android-sdk toolkit on a compatible build host."
+          },
+          "deploy": {
+            "state": "pilot",
+            "capabilityId": "android.app.deploy",
+            "requiresConnectedDevice": true,
+            "requiresAdbAuthorization": true,
+            "requiresExplicitApproval": true
+          },
+          "backup": {
+            "state": "pilot",
+            "capabilityId": "android.app.backup",
+            "requiresConnectedDevice": true,
+            "requiresExplicitApproval": true
+          },
+          "restore": {
+            "state": "pilot",
+            "capabilityId": "android.app.restore",
+            "requiresConnectedDevice": true,
+            "requiresExplicitApproval": true
+          },
+          "cleanup": {
+            "state": "pilot",
+            "recipeId": "android.adb.remove",
+            "instructions": "Remove only the Main{Create}-managed per-user ADB package copy and manifest. Preserve system ADB packages, device authorization keys, projects, APK artifacts and backups.",
+            "preserves": [
+              "system ADB package",
+              "ADB authorization keys",
+              "APK artifacts",
+              "application backups",
+              "Android projects"
+            ]
+          }
+        },
+        "constraints": [
+          "ADB is a device-operation adapter, not an Android SDK build host.",
+          "Linux ARM64 ADB is distribution-managed; its exact package version is recorded from the signed OS package and verified at runtime.",
+          "The EPD-42S profile requires Android 5.1.1/API 22 and armeabi-v7a compatibility.",
+          "Only APK package artifacts are backed up/restored; private app data and full-device images are out of scope."
+        ]
+      }
     ]
   }
 ]
