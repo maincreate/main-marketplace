@@ -27,6 +27,8 @@ const legacy=androidVersion.deviceSupport?.targetProfiles?.find(p=>p.id==="andro
 if(legacy?.apiLevel!==22||legacy?.nativeAbi!=="armeabi-v7a")throw new Error("Android 5.1.1 E Ink target profile is invalid");
 for(const toolkit of toolkits)for(const version of toolkit.versions||[]){
  const lifecycle=["install","build","deploy","backup","restore","cleanup"];
+ if(["available","pilot"].includes(version.lifecycle?.install?.state)&&!version.lifecycle.install.capabilityId)
+  throw new Error("Install lifecycle must reference a reviewed platform capability: "+toolkit.id+"@"+version.version);
  if(!lifecycle.every(stage=>version.lifecycle?.[stage]))throw new Error("Incomplete lifecycle: "+toolkit.id+"@"+version.version);
  if(version.components?.installCommand)throw new Error("Executable installer commands are forbidden in marketplace metadata");
  for(const installer of version.installers||[]){
