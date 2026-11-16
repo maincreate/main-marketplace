@@ -293,7 +293,8 @@
             "state": "pilot",
             "recipeId": "espressif.esp-idf.install",
             "versionScoped": true,
-            "requiresExplicitApproval": true
+            "requiresExplicitApproval": true,
+            "capabilityId": "sdk.esp_idf.install"
           },
           "build": {
             "state": "pilot",
@@ -628,7 +629,8 @@
             "state": "pilot",
             "recipeId": "espressif.esp-idf.install",
             "versionScoped": true,
-            "requiresExplicitApproval": true
+            "requiresExplicitApproval": true,
+            "capabilityId": "sdk.esp_idf.install"
           },
           "build": {
             "state": "pilot",
@@ -776,7 +778,8 @@
             "state": "available",
             "recipeId": "arduino-cli.install",
             "versionScoped": true,
-            "requiresExplicitApproval": true
+            "requiresExplicitApproval": true,
+            "capabilityId": "sdk.arduino_cli.install"
           },
           "build": {
             "state": "planned",
@@ -992,7 +995,8 @@
             "recipeId": "android.sdk.install",
             "versionScoped": true,
             "requiresExplicitApproval": true,
-            "requiresGoogleSdkLicenseAcceptance": true
+            "requiresGoogleSdkLicenseAcceptance": true,
+            "capabilityId": "sdk.android_sdk.install"
           },
           "build": {
             "state": "pilot",
@@ -1295,7 +1299,8 @@
             "state": "pilot",
             "recipeId": "android.adb.install-debian",
             "versionScoped": true,
-            "requiresExplicitApproval": true
+            "requiresExplicitApproval": true,
+            "capabilityId": "sdk.android_adb.install"
           },
           "build": {
             "state": "unsupported",
