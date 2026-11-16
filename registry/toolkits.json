@@ -29,19 +29,22 @@
         "status": "pilot",
         "releaseUrl": "https://github.com/espressif/esp-idf/releases/tag/v5.5.6",
         "installer": {
-          "name": "Espressif Installation Manager (EIM)",
-          "source": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html"
+          "name": "Espressif Installation Manager CLI",
+          "version": "0.21.1",
+          "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
         },
         "components": {
           "framework": "ESP-IDF",
           "frameworkVersion": "5.5.6",
-          "installer": "EIM",
+          "installer": "EIM CLI 0.21.1",
           "buildTools": [
             "CMake",
             "Ninja",
             "Python"
           ],
-          "toolchain": "version-matched Espressif cross-compilers"
+          "toolchain": "version-matched Espressif cross-compilers",
+          "installCommand": "eim install -i v{version} -n true --cleanup true",
+          "installRoot": "~/.local/share/maincreate/toolkits/esp-idf"
         },
         "compatibility": {
           "install": [
@@ -339,6 +342,22 @@
           "A build runner and a firmware deployment runner may be different machines; pass a signed artifact manifest between them.",
           "Register GitHub labels only after the exact version and capability are verified on that runner.",
           "The current ESP-IDF build adapter is partial until it enforces the marketplace-selected installed version."
+        ],
+        "installers": [
+          {
+            "os": "linux",
+            "architecture": "x64",
+            "artifact": "eim-cli-linux-x64-v0.21.1.zip",
+            "sha256": "87a1d17c0208fe402269d39f471d862525ca902045b1a97f8af99902342fea8b",
+            "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
+          },
+          {
+            "os": "linux",
+            "architecture": "arm64",
+            "artifact": "eim-cli-linux-aarch64-v0.21.1.zip",
+            "sha256": "dbb7db88869b985404757270c4b7e3a62a701759e0c224722a8cfa2414d08180",
+            "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
+          }
         ]
       },
       {
@@ -347,19 +366,22 @@
         "status": "pilot",
         "releaseUrl": "https://github.com/espressif/esp-idf/releases/tag/v6.1.1",
         "installer": {
-          "name": "Espressif Installation Manager (EIM)",
-          "source": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html"
+          "name": "Espressif Installation Manager CLI",
+          "version": "0.21.1",
+          "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
         },
         "components": {
           "framework": "ESP-IDF",
           "frameworkVersion": "6.1.1",
-          "installer": "EIM",
+          "installer": "EIM CLI 0.21.1",
           "buildTools": [
             "CMake",
             "Ninja",
             "Python"
           ],
-          "toolchain": "version-matched Espressif cross-compilers"
+          "toolchain": "version-matched Espressif cross-compilers",
+          "installCommand": "eim install -i v{version} -n true --cleanup true",
+          "installRoot": "~/.local/share/maincreate/toolkits/esp-idf"
         },
         "compatibility": {
           "install": [
@@ -657,6 +679,22 @@
           "A build runner and a firmware deployment runner may be different machines; pass a signed artifact manifest between them.",
           "Register GitHub labels only after the exact version and capability are verified on that runner.",
           "The current ESP-IDF build adapter is partial until it enforces the marketplace-selected installed version."
+        ],
+        "installers": [
+          {
+            "os": "linux",
+            "architecture": "x64",
+            "artifact": "eim-cli-linux-x64-v0.21.1.zip",
+            "sha256": "87a1d17c0208fe402269d39f471d862525ca902045b1a97f8af99902342fea8b",
+            "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
+          },
+          {
+            "os": "linux",
+            "architecture": "arm64",
+            "artifact": "eim-cli-linux-aarch64-v0.21.1.zip",
+            "sha256": "dbb7db88869b985404757270c4b7e3a62a701759e0c224722a8cfa2414d08180",
+            "source": "https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1"
+          }
         ]
       }
     ]
