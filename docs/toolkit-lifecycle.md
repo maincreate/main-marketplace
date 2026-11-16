@@ -29,15 +29,15 @@ Example ESP-IDF labels:
 
 ```text
 self-hosted, maincreate, linux, arm64,
-toolkit-esp-idf-6.1.1, capability-firmware-build, target-esp32
+toolkit-esp-idf-6-1-1, capability-firmware-build, target-esp32
 ```
 
 Example Android app build labels:
 
 ```text
 self-hosted, maincreate, macos, arm64,
-toolkit-android-sdk-2026.2.2-patch1, capability-android-app-build,
-target-android-api-22, target-abi-armeabi-v7a
+toolkit-android-sdk-2026-2-2-patch1, capability-android-app-build,
+target-android-api-22, target-device-avalue-epd-42s, target-abi-armeabi-v7a
 ```
 
 An Android deployment runner has a separate `capability-android-app-deploy` label and must be connected to, and authorized for, the requested device. Uninstalling or invalidating a toolkit/capability removes the corresponding labels. Projects request all required labels; GitHub schedules only a runner with the complete combination.
