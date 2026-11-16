@@ -1,7 +1,19 @@
 # Main{Create} marketplace
 
-The official builder catalog contains SDK and toolkit profiles in `registry/toolkits.json` and hardware-to-SDK compatibility in `registry/microcontrollers.json`. This initial catalog comes from upstream commit `f25069c0d6d10e510b1eb0fcdc63862372d57687`.
+The official builder catalog contains versioned SDK and toolkit profiles in `registry/toolkits.json` and hardware-to-SDK compatibility in `registry/microcontrollers.json`. The toolkit catalog is validated against `schemas/toolkits.schema.json`.
 
-[main-platform](https://github.com/maincreate/main-platform) pins a catalog revision and loads the vendored JSON. Execution policy and capability definitions belong to the platform. Approved installers and execution adapters belong to [main-builders](https://github.com/maincreate/main-builders).
+[main-platform](https://github.com/maincreate/main-platform) pins a catalog revision and loads the vendored JSON. Execution policy, compatibility resolution, approval and capability definitions belong to the platform. Reviewed installers, build/flash/backup/restore adapters and cleanup executors belong to [main-builders](https://github.com/maincreate/main-builders).
 
-Catalog entries describe requirements and compatibility. They must never carry shell commands or executable hooks. Dependency resolution, signed installation recipes, and external catalog sources are future work.
+## Toolkit lifecycle
+
+Every toolkit version declares:
+
+- exact version and upstream provenance;
+- supported OS/architecture combinations for install, build, flash, backup and restore independently;
+- device families, transports and identity-probe requirements;
+- install, build, flash, backup, restore and cleanup recipe/capability references;
+- limitations, approval requirements and cleanup preservation rules.
+
+Marketplace data is declarative. It must never contain shell commands, executable hooks or arbitrary scripts. A catalog reference does not make an operation executable: the platform must expose a reviewed capability and the builders repository must provide a tested adapter.
+
+See [Versioned toolkit lifecycle](docs/toolkit-lifecycle.md) for the contract and the initial Espressif and Android profiles.
