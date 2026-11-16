@@ -693,8 +693,6 @@
         "installer": {
           "name": "Android SDK Command-line Tools",
           "version": "15859902",
-          "artifact": "commandlinetools-linux-15859902_latest.zip",
-          "sha256": "4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583",
           "source": "https://developer.android.com/studio/releases"
         },
         "components": {
@@ -1051,6 +1049,36 @@
           "The Android 5.1.1 E Ink target is API 22 and ARMv7/armeabi-v7a; build an APK for direct sideloading.",
           "The E Ink panel driver and vendor EPDC integration are device/BSP-specific and are not supplied by the generic Android SDK.",
           "The current Android profile uses stable Platform-Tools 37.0.1; 37.0.3 is Canary and is not selected."
+        ],
+        "installers": [
+          {
+            "os": "linux",
+            "architecture": "x64",
+            "artifact": "commandlinetools-linux-15859902_latest.zip",
+            "sha256": "4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583",
+            "source": "https://developer.android.com/studio/releases"
+          },
+          {
+            "os": "macos",
+            "architecture": "x64",
+            "artifact": "commandlinetools-mac_x86_64-15859902_latest.zip",
+            "sha256": "c5a6378ab5cf7e0d5701921405115befff13e9ff7417fb588389338f8bd050f3",
+            "source": "https://developer.android.com/studio/releases"
+          },
+          {
+            "os": "macos",
+            "architecture": "arm64",
+            "artifact": "commandlinetools-mac_arm64-15859902_latest.zip",
+            "sha256": "835b62a26162b229b441d1f6d4680383815a270809eb33522c0d480fa5002c4e",
+            "source": "https://developer.android.com/studio/releases"
+          },
+          {
+            "os": "windows",
+            "architecture": "x64",
+            "artifact": "commandlinetools-win-15859902_latest.zip",
+            "sha256": "90ae805d20434428bffcb699c290860f19bb5f66a67e6b330067e3de801fb04a",
+            "source": "https://developer.android.com/studio/releases"
+          }
         ]
       }
     ]
