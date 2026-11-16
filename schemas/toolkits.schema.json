@@ -448,6 +448,36 @@
                 },
                 "additionalProperties": false
               }
+            },
+            "projectRequirements": {
+              "type": "object",
+              "properties": {
+                "compileSdk": {
+                  "type": "integer"
+                },
+                "defaultTargetSdk": {
+                  "type": "integer"
+                },
+                "legacyTargetSdk": {
+                  "type": "integer"
+                },
+                "legacyMinSdk": {
+                  "type": "integer"
+                },
+                "legacyNativeAbi": {
+                  "type": "string"
+                },
+                "androidGradlePlugin": {
+                  "type": "string"
+                },
+                "gradleWrapper": {
+                  "type": "string"
+                },
+                "jdkMinimum": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
             }
           },
           "additionalProperties": false
