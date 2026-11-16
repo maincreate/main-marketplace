@@ -941,7 +941,7 @@
             "runnerLabels": [
               "toolkit-android-sdk-2026-2-2-patch1",
               "capability-android-app-deploy",
-              "device-avalue-epd-42s",
+              "target-device-avalue-epd-42s",
               "target-android-api-22",
               "target-abi-armeabi-v7a"
             ],
@@ -966,7 +966,7 @@
             "runnerLabels": [
               "toolkit-android-sdk-2026-2-2-patch1",
               "capability-android-app-backup",
-              "device-avalue-epd-42s"
+              "target-device-avalue-epd-42s"
             ],
             "supportedDeviceProfiles": [
               "avalue-epd-42s"
@@ -988,7 +988,7 @@
             "runnerLabels": [
               "toolkit-android-sdk-2026-2-2-patch1",
               "capability-android-app-restore",
-              "device-avalue-epd-42s"
+              "target-device-avalue-epd-42s"
             ],
             "supportedDeviceProfiles": [
               "avalue-epd-42s"
