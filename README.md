@@ -1,19 +1,13 @@
 # Main{Create} marketplace
 
-The official builder catalog contains versioned SDK and toolkit profiles in `registry/toolkits.json` and hardware-to-SDK compatibility in `registry/microcontrollers.json`. The toolkit catalog is validated against `schemas/toolkits.schema.json`.
+The official builder catalog contains versioned toolkit profiles in `registry/toolkits.json`, ESP32 hardware-to-SDK compatibility in `registry/microcontrollers.json`, and Android device target profiles in `registry/android-devices.json`. Toolkit profiles are validated against `schemas/toolkits.schema.json`.
 
-[main-platform](https://github.com/maincreate/main-platform) pins a catalog revision and loads the vendored JSON. Execution policy, compatibility resolution, approval and capability definitions belong to the platform. Reviewed installers, build/flash/backup/restore adapters and cleanup executors belong to [main-builders](https://github.com/maincreate/main-builders).
+[main-platform](https://github.com/maincreate/main-platform) consumes the vendored catalog. It owns compatibility resolution, builder installation state, GitHub runner labels, scheduling, artifact handoff and approval. Reviewed installers, build/deploy/backup/restore adapters and cleanup executors belong to [main-builders](https://github.com/maincreate/main-builders).
 
-## Toolkit lifecycle
+## Artifact-specific toolkit lifecycle
 
-Every toolkit version declares:
+Every toolkit version declares exact version/provenance, host OS/architecture compatibility, artifact and target types, build/deploy/backup/restore capabilities, and safe cleanup guidance. ESP-IDF creates and flashes firmware images. Android creates and deploys APK application artifacts through ADB; it is not an Android OS firmware flasher.
 
-- exact version and upstream provenance;
-- supported OS/architecture combinations for install, build, flash, backup and restore independently;
-- device families, transports and identity-probe requirements;
-- install, build, flash, backup, restore and cleanup recipe/capability references;
-- limitations, approval requirements and cleanup preservation rules.
+Runner labels are derived from verified installed versions and validated capabilities. A build runner may differ from the deployment runner; artifacts move between them with a target/checksum manifest.
 
-Marketplace data is declarative. It must never contain shell commands, executable hooks or arbitrary scripts. A catalog reference does not make an operation executable: the platform must expose a reviewed capability and the builders repository must provide a tested adapter.
-
-See [Versioned toolkit lifecycle](docs/toolkit-lifecycle.md) for the contract and the initial Espressif and Android profiles.
+See [Versioned toolkit lifecycle](docs/toolkit-lifecycle.md) for compatibility, labels, the current ESP-IDF and Android profiles, and the Android 5.1.1 E Ink target.
