@@ -1,0 +1,687 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/maincreate/main-marketplace/blob/main/schemas/toolkits.schema.json",
+  "title": "Main{Create} Toolkit Catalog",
+  "description": "Declarative versioned toolkit catalog. Executable commands and installer hooks are forbidden.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "displayName",
+      "category",
+      "state",
+      "installation",
+      "description",
+      "capabilities"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9.-]*$"
+      },
+      "schemaVersion": {
+        "type": "integer",
+        "minimum": 2
+      },
+      "displayName": {
+        "type": "string",
+        "minLength": 1
+      },
+      "category": {
+        "type": "string",
+        "minLength": 1
+      },
+      "state": {
+        "enum": [
+          "catalog-only",
+          "pilot",
+          "available",
+          "deprecated"
+        ]
+      },
+      "installation": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "capabilities": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "publisher": {
+        "type": "object",
+        "required": [
+          "name",
+          "source"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "trust": {
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string"
+          },
+          "versionValidationRequired": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "versions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "version",
+            "channel",
+            "status",
+            "compatibility",
+            "lifecycle"
+          ],
+          "properties": {
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "channel": {
+              "enum": [
+                "stable",
+                "beta",
+                "rc",
+                "preview",
+                "lts",
+                "requested"
+              ]
+            },
+            "status": {
+              "enum": [
+                "catalog-only",
+                "pilot",
+                "available",
+                "deprecated",
+                "blocked"
+              ]
+            },
+            "releaseUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "installer": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "artifact": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-fA-F0-9]{64}$"
+                },
+                "source": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": true
+            },
+            "components": {
+              "type": "object"
+            },
+            "compatibility": {
+              "type": "object",
+              "required": [
+                "install",
+                "build",
+                "deploy",
+                "backup",
+                "restore"
+              ],
+              "properties": {
+                "install": {
+                  "$ref": "#/$defs/targets"
+                },
+                "build": {
+                  "$ref": "#/$defs/targets"
+                },
+                "backup": {
+                  "$ref": "#/$defs/targets"
+                },
+                "restore": {
+                  "$ref": "#/$defs/targets"
+                },
+                "deploy": {
+                  "$ref": "#/$defs/targets"
+                }
+              },
+              "additionalProperties": false
+            },
+            "deviceSupport": {
+              "type": "object"
+            },
+            "lifecycle": {
+              "type": "object",
+              "required": [
+                "install",
+                "build",
+                "deploy",
+                "backup",
+                "restore",
+                "cleanup"
+              ],
+              "properties": {
+                "install": {
+                  "$ref": "#/$defs/action"
+                },
+                "build": {
+                  "$ref": "#/$defs/action"
+                },
+                "backup": {
+                  "$ref": "#/$defs/action"
+                },
+                "restore": {
+                  "$ref": "#/$defs/action"
+                },
+                "cleanup": {
+                  "$ref": "#/$defs/action"
+                },
+                "deploy": {
+                  "$ref": "#/$defs/action"
+                }
+              },
+              "additionalProperties": false
+            },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "operations": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "build": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "artifactType": {
+                      "type": "string"
+                    },
+                    "artifactTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "outputs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "targetFamily": {
+                      "type": "string"
+                    },
+                    "targetProfiles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "runnerLabels": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "deploy": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId",
+                    "operationType"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "operationType": {
+                      "type": "string"
+                    },
+                    "artifactType": {
+                      "type": "string"
+                    },
+                    "targetObjectType": {
+                      "type": "string"
+                    },
+                    "requiresActiveChipProbe": {
+                      "type": "boolean"
+                    },
+                    "requiresMatchingChipAndFlashLayout": {
+                      "type": "boolean"
+                    },
+                    "requiresExplicitApproval": {
+                      "type": "boolean"
+                    },
+                    "requiresConnectedDevice": {
+                      "type": "boolean"
+                    },
+                    "requiresAdbAuthorization": {
+                      "type": "boolean"
+                    },
+                    "requiresPackageAndApiCompatibility": {
+                      "type": "boolean"
+                    },
+                    "runnerLabels": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "backup": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId",
+                    "objectType"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "objectType": {
+                      "type": "string"
+                    },
+                    "methods": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "requiresActiveChipProbe": {
+                      "type": "boolean"
+                    },
+                    "requiresExplicitApproval": {
+                      "type": "boolean"
+                    },
+                    "requiresConnectedDevice": {
+                      "type": "boolean"
+                    },
+                    "limitations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "restore": {
+                  "type": "object",
+                  "required": [
+                    "capabilityId",
+                    "objectType"
+                  ],
+                  "properties": {
+                    "capabilityId": {
+                      "type": "string"
+                    },
+                    "objectType": {
+                      "type": "string"
+                    },
+                    "operationType": {
+                      "type": "string"
+                    },
+                    "methods": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "requiresExactChipMatch": {
+                      "type": "boolean"
+                    },
+                    "requiresFlashSizeMatch": {
+                      "type": "boolean"
+                    },
+                    "requiresPartitionLayoutMatch": {
+                      "type": "boolean"
+                    },
+                    "requiresActiveChipProbe": {
+                      "type": "boolean"
+                    },
+                    "requiresExplicitApproval": {
+                      "type": "boolean"
+                    },
+                    "requiresConnectedDevice": {
+                      "type": "boolean"
+                    },
+                    "requiresPackageAndSignatureValidation": {
+                      "type": "boolean"
+                    },
+                    "limitations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": false
+            },
+            "installers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "os",
+                  "architecture",
+                  "artifact",
+                  "sha256",
+                  "source"
+                ],
+                "properties": {
+                  "os": {
+                    "enum": [
+                      "linux",
+                      "windows",
+                      "macos"
+                    ]
+                  },
+                  "architecture": {
+                    "enum": [
+                      "x64",
+                      "arm64",
+                      "x86",
+                      "armv7"
+                    ]
+                  },
+                  "artifact": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{64}$"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "projectRequirements": {
+              "type": "object",
+              "properties": {
+                "compileSdk": {
+                  "type": "integer"
+                },
+                "defaultTargetSdk": {
+                  "type": "integer"
+                },
+                "legacyTargetSdk": {
+                  "type": "integer"
+                },
+                "legacyMinSdk": {
+                  "type": "integer"
+                },
+                "legacyNativeAbi": {
+                  "type": "string"
+                },
+                "androidGradlePlugin": {
+                  "type": "string"
+                },
+                "gradleWrapper": {
+                  "type": "string"
+                },
+                "jdkMinimum": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            },
+            "prerequisites": {
+              "type": "array",
+              "maxItems": 16,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "minimumMajorVersion",
+                  "installation",
+                  "requiredFor",
+                  "validation",
+                  "reason"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{1,63}$"
+                  },
+                  "minimumMajorVersion": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 99
+                  },
+                  "installation": {
+                    "type": "string",
+                    "enum": [
+                      "operator-managed",
+                      "maincreate-managed"
+                    ]
+                  },
+                  "requiredFor": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                      "type": "string",
+                      "maxLength": 64
+                    }
+                  },
+                  "validation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  }
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  "$defs": {
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "os",
+          "architecture",
+          "status"
+        ],
+        "properties": {
+          "os": {
+            "enum": [
+              "linux",
+              "windows",
+              "macos"
+            ]
+          },
+          "architecture": {
+            "enum": [
+              "x64",
+              "arm64",
+              "x86",
+              "armv7"
+            ]
+          },
+          "status": {
+            "enum": [
+              "supported",
+              "conditional",
+              "validation-required",
+              "unsupported"
+            ]
+          },
+          "requiresConnectedDevice": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "available",
+            "partial",
+            "planned",
+            "unsupported",
+            "pilot"
+          ]
+        },
+        "recipeId": {
+          "type": "string"
+        },
+        "capabilityId": {
+          "type": "string"
+        },
+        "capabilityIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "versionScoped": {
+          "type": "boolean"
+        },
+        "requiresExplicitApproval": {
+          "type": "boolean"
+        },
+        "requiresInstalledVersion": {
+          "type": "boolean"
+        },
+        "requiresPinnedProjectRevision": {
+          "type": "boolean"
+        },
+        "versionGuardRequired": {
+          "type": "boolean"
+        },
+        "requiresActiveChipProbe": {
+          "type": "boolean"
+        },
+        "requiresMatchingChipAndImage": {
+          "type": "boolean"
+        },
+        "requiresExactDeviceMatch": {
+          "type": "boolean"
+        },
+        "requiresConnectedDevice": {
+          "type": "boolean"
+        },
+        "requiresDeviceModelMatch": {
+          "type": "boolean"
+        },
+        "requiresProjectGradleWrapper": {
+          "type": "boolean"
+        },
+        "fastbootRequiresBootloaderUnlock": {
+          "type": "boolean"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "preserves": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requiresGoogleSdkLicenseAcceptance": {
+          "type": "boolean"
+        },
+        "requiresAdbAuthorization": {
+          "type": "boolean"
+        },
+        "requiresPackageAndApiCompatibility": {
+          "type": "boolean"
+        },
+        "requiresExactChipMatch": {
+          "type": "boolean"
+        },
+        "requiresFlashSizeMatch": {
+          "type": "boolean"
+        },
+        "requiresPartitionLayoutMatch": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

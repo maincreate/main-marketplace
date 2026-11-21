@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/maincreate/main-marketplace/blob/main/schemas/android-devices.schema.json",
+  "title": "Main{Create} Android Device Targets",
+  "type": "object",
+  "required": [
+    "schema",
+    "devices"
+  ],
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "model",
+          "product",
+          "soc",
+          "cpuArchitecture",
+          "androidVersion",
+          "apiLevel",
+          "abi",
+          "display",
+          "deployment",
+          "applicationCompatibility"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "soc": {
+            "type": "string"
+          },
+          "cpuArchitecture": {
+            "type": "string"
+          },
+          "androidVersion": {
+            "type": "string"
+          },
+          "apiLevel": {
+            "type": "integer"
+          },
+          "abi": {
+            "type": "string"
+          },
+          "kernel": {
+            "type": "string"
+          },
+          "display": {
+            "type": "object",
+            "required": [
+              "technology",
+              "resolution",
+              "controller"
+            ],
+            "properties": {
+              "technology": {
+                "type": "string"
+              },
+              "resolution": {
+                "type": "string"
+              },
+              "controller": {
+                "type": "string"
+              },
+              "touch": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": true
+          },
+          "deployment": {
+            "type": "object",
+            "required": [
+              "transport",
+              "artifactType",
+              "operation"
+            ],
+            "properties": {
+              "transport": {
+                "type": "string"
+              },
+              "artifactType": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              },
+              "fastbootFirmwareFlash": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "applicationCompatibility": {
+            "type": "object",
+            "required": [
+              "minimumApi",
+              "preferredTargetApi",
+              "requiredNativeAbi",
+              "directSideloadApk"
+            ],
+            "properties": {
+              "minimumApi": {
+                "type": "integer"
+              },
+              "preferredTargetApi": {
+                "type": "integer"
+              },
+              "requiredNativeAbi": {
+                "type": "string"
+              },
+              "directSideloadApk": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

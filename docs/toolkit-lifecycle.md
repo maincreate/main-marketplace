@@ -1,0 +1,124 @@
+# Versioned toolkit lifecycle
+
+## Ownership boundaries
+
+- **main-marketplace** owns declarative toolkit metadata: exact versions, upstream provenance, supported builder OS/architecture combinations, target device profiles, artifact types, capabilities, limitations and cleanup guidance.
+- **main-platform** owns policy, compatibility resolution, installation orchestration, builder inventory, GitHub runner labels, job scheduling, artifact handoff, approval UX and audit.
+- **main-builders** owns reviewed, version-pinned installers, validators, build adapters, device deployment, object-specific backup/restore and cleanup executors.
+
+Marketplace records MUST NOT contain shell commands, scripts, executable hooks, arbitrary URLs supplied by users, or privileged implementation details. A `recipeId` or `capabilityId` references a reviewed implementation; it is not executable by itself.
+
+## Separate the host, toolkit, artifact and target device
+
+These are independent compatibility dimensions:
+
+1. **Builder host** — OS and CPU architecture on which the toolkit is installed and executed.
+2. **Toolkit version** — exact installed framework/toolchain release.
+3. **Artifact target** — the firmware family, Android API target, app ABI, or other output type.
+4. **Device operation target** — the actual connected device, its identity, transport, OS/API, ABI, and device-specific permissions.
+
+Do not confuse the builder's architecture with the target device's architecture. An x64 or macOS ARM64 runner can build an APK containing `armeabi-v7a` native code for a 32-bit ARM Android device. Likewise, an ESP-IDF build on x64 can produce ESP32 firmware that is flashed later by a separate Linux ARM64 runner connected to the board.
+
+Build and deployment may run on different machines. The build runner emits an immutable artifact and manifest containing source revision, toolkit/version, artifact type, target profile, target chip/API/ABI, checksum, and signing-key identifier (never the private key). A deployment runner verifies the manifest and target before writing/installing.
+
+## GitHub runner labels
+
+Main{Create} Platform derives labels from verified machine state, not from user-entered declarations. A builder receives a toolkit/version label only after installation and executable-version verification; it receives capability/target labels only after the relevant adapter, permissions, and device access are validated.
+
+Example ESP-IDF labels:
+
+```text
+self-hosted, maincreate, linux, arm64,
+toolkit-esp-idf-6-1-1, capability-firmware-build, target-esp32
+```
+
+Example Android app build labels:
+
+```text
+self-hosted, maincreate, macos, arm64,
+toolkit-android-sdk-2026-2-2-patch1, capability-android-app-build,
+target-android-api-22, target-device-avalue-epd-42s, target-abi-armeabi-v7a
+```
+
+An Android deployment runner carries `toolkit-android-adb-system`, `capability-android-app-deploy`, and device/API/ABI labels, and must be connected to and authorized for the requested device. Uninstalling or invalidating a toolkit/capability removes the corresponding labels. Projects request all required labels; GitHub schedules only a runner with the complete combination.
+
+## Lifecycle contract
+
+Each version declares six lifecycle stages:
+
+1. **Install** — exact toolkit version, upstream provenance, checksum/signature policy, host compatibility and approval.
+2. **Build** — operation-specific artifact type, target profile, required installed version, and compatible host OS/architecture.
+3. **Deploy** — the toolkit-specific operation on a specific object. ESP-IDF deploys/ flashes firmware images to ESP32 devices. Android deploys APK applications using ADB. Android application deployment is not Fastboot firmware flashing.
+4. **Backup** — backs up the specific object owned by the toolkit, not a generic whole-device backup.
+5. **Restore** — restores that same object type after target compatibility and integrity checks.
+6. **Cleanup** — version-scoped removal with a dry-run inventory, reference checks, and a preservation list.
+
+### ESP-IDF: firmware objects
+
+Current upstream stable ESP-IDF is `6.1.1`; keep `5.5.6` as a selectable older version for existing projects. The catalog includes both exact versions. The release roadmap lists later `6.1.2` planning, but the `v6.1.2` GitHub release tag is not published; do not install an unreleased version. The marketplace pins EIM CLI `0.21.1` and its official SHA-256-verified Linux ARM64 and x64 archives.
+
+ESP-IDF builds a complete firmware bundle for the selected ESP32 family: bootloader, partition table, application, declared data partitions, and a merged full firmware image where appropriate. The deployment operation flashes that firmware bundle to a matching chip. Backup/restore apply to ESP32 firmware-image objects, not generic peripherals or external device state.
+
+Flash/readback requires an active `esptool` chip probe; a USB descriptor is not chip identity. Readback may be blocked or unusable with flash encryption, secure boot, read protection or chip-specific security settings. Firmware manifests record chip model, flash size, partition layout, security observations, SHA-256 and provenance. Restore rejects incompatible chip family, flash size, partition layout or security state.
+
+The runner adapter PR is implementing `firmware.esp_idf.build`, `firmware.esp_idf.flash`, `firmware.esp_idf.backup`, `firmware.esp_idf.restore`, and version-scoped cleanup. These remain pilot capabilities until CI and physical ESP32 validation pass.
+
+### Android: application objects
+
+Android is deliberately split into two toolkits because the build host and USB-connected device host have different architecture requirements.
+
+**Android SDK — build toolkit**
+
+Current stable profile: Android Studio `2026.2.2 Patch 1`, command-line tools `15859902`, Platform-Tools `37.0.1`, Build-Tools `36.0.0`, compile SDK/API `37`, Android Gradle Plugin `9.5.1`, Gradle `9.6.0`, and JDK `17`. Main{Create} installs the command-line toolchain on Linux x64 only for this pilot. The installer pins the official archive SHA-256 and verifies the installed component versions. A JDK 17 runtime is required; the installer does not silently replace system Java.
+
+Two app target profiles are available from the same build toolkit:
+
+- **Current Android:** compile/target API `37`, with minimum API and ABI selected per project.
+- **Legacy E Ink Android:** compile with current SDK tools while enforcing Android `5.1.1` / API `22` runtime compatibility, `minSdk 22`, `targetSdk 22`, and APK output. Include `armeabi-v7a` native libraries when native code is used.
+
+The Android SDK toolkit owns application builds only. It does not deploy applications, back up device objects, or flash Android OS firmware.
+
+**Android ADB — device toolkit**
+
+The separate `android-adb` toolkit provides host-native ADB operations on Linux ARM64 and Linux x64. It uses an existing system ADB client when present or extracts the Debian-signed `adb` package into the Main{Create}-managed per-user toolkit directory. This allows the Raspberry Pi ARM64 builder to act as the USB-connected deployment runner without installing the Google Linux x64 Android SDK on ARM64.
+
+The registered device profile `avalue-epd-42s` describes the Avalue EPD-42S / `SABRESD_MX7D`, product `sabresd_7d_eink`, NXP/Freescale i.MX7D ARMv7, Android 5.1.1/API 22, kernel 3.14.52, and EPD-42S-SIDA0-01R 2880x2160 E Ink panel using `mxc_epdc_fb`. The build host may be Linux x64; the target APK must match API/ABI. Build and deploy may run on different machines.
+
+Android ADB object operations are package-specific:
+
+- **Deploy:** install/update a verified APK using `adb install -r`. This is application deployment, never Fastboot firmware flashing.
+- **Backup:** export the installed base/split APK package artifacts where Android package-manager permissions allow it. No private app data, databases, settings or whole-device image is included.
+- **Restore:** reinstall the verified base/split APK package artifacts to the same authorized device serial and package identity. No private app data or Android OS firmware is restored.
+
+The generic Android SDK does not provide the E Ink vendor HAL, EPDC driver, waveform assets or BSP integration. App-level display control must use the device's existing vendor/BSP interface and be validated on the actual panel.
+
+## Compatibility and labels
+
+Compatibility is evaluated independently for install, build, deploy, backup and restore. A builder is eligible only if its observed host OS/architecture is compatible with the exact toolkit version and the specific operation. A connected target device is an additional requirement for deploy/backup/restore; it is not implied by the host being compatible.
+
+`supported` in the catalog means the upstream/toolchain combination is supported. It does not mean a specific Main{Create} runner is ready. Platform must wait for successful installation, exact version verification, adapter self-tests and (for device operations) target probing before registering capability labels.
+
+## Cleanup safety
+
+Cleanup is per toolkit version and per host. It must:
+
+- refuse removal while a job references the version;
+- display the exact files, directories and packages to be removed;
+- preserve shared components still referenced by another toolkit/version;
+- preserve project checkouts, build outputs, APK/AAB/firmware artifacts, signing keys, device backups and user data;
+- require explicit approval for deletion; and
+- write a cleanup audit record with removed paths and final verification.
+
+## Sources
+
+- ESP-IDF stable v6.1.1: https://github.com/espressif/esp-idf/releases/tag/v6.1.1
+- EIM CLI v0.21.1 release and SHA-256 asset metadata: https://github.com/espressif/idf-im-ui/releases/tag/v0.21.1
+- EIM CLI installation: https://docs.espressif.com/projects/idf-im-ui/en/latest/cli_installation.html
+- ESP-IDF Linux installation: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-setup.html
+- ESP-IDF macOS installation: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/macos-setup.html
+- ESP-IDF Windows installation: https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/windows-setup.html
+- Android Studio stable release: https://developer.android.com/studio/releases
+- Android Gradle Plugin: https://developer.android.com/build/releases/about-agp
+- Android Platform-Tools: https://developer.android.com/tools/releases/platform-tools
+- Android API 22: https://developer.android.com/tools/releases/platforms
+- Android NDK ABIs: https://developer.android.com/ndk/guides/abis

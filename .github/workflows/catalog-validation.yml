@@ -1,0 +1,23 @@
+name: Marketplace catalog validation
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, feature/versioned-toolkit-lifecycle]
+permissions:
+  contents: read
+jobs:
+  validate:
+    # The shared Main{Create} CI runner is private; never execute untrusted fork PR code.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, ci, linux-x64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate versioned catalog schemas and semantic invariants
+        run: |
+          npm install --no-save ajv@8 ajv-formats@3
+          node scripts/validate-catalog.mjs
