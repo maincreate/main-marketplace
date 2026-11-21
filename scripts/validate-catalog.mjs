@@ -20,6 +20,19 @@ const android=toolkits.find(t=>t.id==="android-sdk");
 const adb=toolkits.find(t=>t.id==="android-adb");
 if(!esp?.versions?.some(v=>v.version==="5.5.6")||!esp.versions.some(v=>v.version==="6.1.1"))
  throw new Error("ESP-IDF 5.5.6 and 6.1.1 must both be published");
+// Platform and Host Service both support Linux ARM64 and x64; each declared
+// ESP-IDF release must retain install/build compatibility on both. Prevent
+// accidental drift where a published version cannot be built in our fleet.
+for(const release of esp.versions){
+ for(const architecture of ["arm64","x64"]){
+  for(const operation of ["install","build"]){
+   if(!release.compatibility?.[operation]?.some(x=>
+    x.os==="linux"&&x.architecture===architecture&&x.status==="supported"))
+    throw new Error("Missing verified "+operation+" target for ESP-IDF "+
+      release.version+" on Linux "+architecture);
+  }
+ }
+}
 const androidVersion=android?.versions?.find(v=>v.version==="2026.2.2-patch1");
 if(!androidVersion)throw new Error("Current Android SDK profile is missing");
 if(!adb?.versions?.some(v=>v.version==="system"))throw new Error("Android ADB device toolkit is missing");
