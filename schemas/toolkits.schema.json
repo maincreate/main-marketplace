@@ -473,6 +473,59 @@
                 }
               },
               "additionalProperties": true
+            },
+            "prerequisites": {
+              "type": "array",
+              "maxItems": 16,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "minimumMajorVersion",
+                  "installation",
+                  "requiredFor",
+                  "validation",
+                  "reason"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{1,63}$"
+                  },
+                  "minimumMajorVersion": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 99
+                  },
+                  "installation": {
+                    "type": "string",
+                    "enum": [
+                      "operator-managed",
+                      "maincreate-managed"
+                    ]
+                  },
+                  "requiredFor": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                      "type": "string",
+                      "maxLength": 64
+                    }
+                  },
+                  "validation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  }
+                }
+              }
             }
           },
           "additionalProperties": false
